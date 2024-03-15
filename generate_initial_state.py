@@ -49,67 +49,34 @@ def generate_initial_values(size, goal_number, density, wall_clustering):
 
     return grid
 
+def generate_initial_values_simplex(size, goal_number, scale, octaves, persistence, lacunarity, threshold):
+    # Initialize the map with zeros
+    map_array = np.zeros((size, size))
 
-import numpy as np
+    # Place goals
+    goals_placed = 0
+    while goals_placed < goal_number:
+        x, y = random.randint(0, size - 1), random.randint(0, size - 1)
+        if map_array[x, y] == 0:  # Ensure not placing a goal on top of a wall or another goal
+            map_array[x, y] = 1.0
+            goals_placed += 1
 
-
-# Assuming the 'noise' module is available, let's mock a basic noise function for demonstration
-def pnoise2(x, y, octaves=1, persistence=0.5, lacunarity=2.0, repeatx=1024, repeaty=1024, base=0.0):
-    # This is a placeholder function to simulate Perlin noise values.
-    # The actual Perlin noise function would generate continuous, smooth, random-like values.
-    return np.random.rand()
-
-
-def generate_initial_values_perlin_noise(size, goal_number, scale, octaves, persistence, lacunarity):
-    grid = np.zeros((size, size))
-
-    # Place goal states randomly
-    for _ in range(goal_number):
-        while True:
-            x, y = np.random.randint(size, size=2)
-            if grid[x, y] == 0:
-                grid[x, y] = 1
-                break
-
-    # Generate Perlin noise-based walls
+    # Iterate over each cell in the map
     for i in range(size):
         for j in range(size):
-            # Convert grid coordinates to Perlin noise space according to the specified scale
-            noise_value = pnoise2(i / scale, j / scale, octaves=octaves, persistence=persistence, lacunarity=lacunarity)
-            # Normalize and threshold the noise value to decide if a wall should be placed
-            if noise_value > 0.5 and grid[i, j] == 0:  # Assuming normalized noise values; adjust threshold as needed
-                grid[i, j] = -1
+            # Generate simplex noise for the cell
+            noise_value = snoise2(i / scale,
+                                  j / scale,
+                                  octaves=octaves,
+                                  persistence=persistence,
+                                  lacunarity=lacunarity)
 
-    return grid
+            # If the noise value is above the threshold, mark the cell as a wall
+            # Ensure not placing a wall on a goal
+            if noise_value > threshold and map_array[i, j] != 1.0:
+                map_array[i][j] = -1.0
 
-
-import numpy as np
-
-
-def generate_initial_state_simplex_noise(size, goal_number, scale, octaves, persistence, lacunarity):
-    grid = np.zeros((size, size))
-
-    # Place goal states randomly
-    for _ in range(goal_number):
-        while True:
-            x, y = np.random.randint(size, size=2)
-            if grid[x, y] == 0:
-                grid[x, y] = 1
-                break
-
-    # Generate Simplex noise-based walls
-    for i in range(size):
-        for j in range(size):
-            # Convert grid coordinates to Simplex noise space according to the specified scale
-            noise_value = snoise2(i / scale, j / scale, octaves=octaves, persistence=persistence,
-                                        lacunarity=lacunarity)
-            # Normalize and threshold the noise value to decide if a wall should be placed
-            if noise_value > 0.5 and grid[i, j] == 0:  # Adjust threshold as needed
-                grid[i, j] = -1
-
-    return grid
-
-
+    return map_array
 
 def generate_null_policy_fixed(initial_value_array):
     # Determine the shape from the initial value array

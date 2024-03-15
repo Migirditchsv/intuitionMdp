@@ -1,5 +1,4 @@
-from generate_initial_state import generate_initial_values, generate_null_policy_fixed, \
-    generate_initial_values_perlin_noise, generate_initial_state_simplex_noise
+from generate_initial_state import generate_initial_values, generate_null_policy_fixed, generate_initial_values_simplex
 from policy_value_iteration import policy_value_iteration
 from visualization import plot_value_and_policy
 
@@ -17,20 +16,21 @@ wall_clustering = 0.45  # Probability a new wall will be placed adjacent to an e
 # placement (not used with simplex noise)
 
 # Simplex noise parameters for wall placement
-scale = 10  # Controls the level of detail (smaller values generate larger "blobs" of walls) 1/10th of the world size
+scale = 0.5  # Controls the level of detail (smaller values generate larger "blobs" of walls) 1/10th of the world size
 # is a good starting point
-octaves = 3  # Adds detail at different scales, values of 3-5 offer a good balance of uniformity and complexity
-persistence = 0.5  # Affects the amplitude of each octave. Lower values result in smoother, less pronounced noise,
+octaves = 5  # Adds detail at different scales, values of 3-5 offer a good balance of uniformity and complexity
+persistence = 1.0  # Affects the amplitude of each octave. Lower values result in smoother, less pronounced noise,
 # while higher values make each octave's contribution more significant. For moderate density, values around 0.4 to
 # 0.6 are often suitable.
 lacunarity = 3.0  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical and can
 # produce a natural-looking pattern.
+threshold = 0.1  # The threshold value for wall placement. Higher values result in fewer walls.
 # MDP Parameters
 stochasticity = 0.5  # Instead of a transition matrix, we use a stochasticity parameter
 movement_cost_scale = 5.0  # Scaling factor for movement cost
 
 # Generate the initial value array using Perlin noise
-initial_value_array = generate_initial_values(size, goal_number, density, wall_clustering)
+initial_value_array = generate_initial_values_simplex(size, goal_number, scale, octaves, persistence, lacunarity, threshold)
 
 # Example usage with the previously generated initial value array
 initial_policy = generate_null_policy_fixed(initial_value_array)
