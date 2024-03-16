@@ -40,6 +40,7 @@ initial_policy = generate_null_policy_fixed(initial_value_array)
 
 # Run the policy and value iteration algorithm until the delta value is below the threshold
 value_array = initial_value_array
+policy_array = initial_policy
 max_delta_value = float('inf')
 iteration_count = 0
 while max_delta_value > convergence_threshold and iteration_count < max_iterations:
