@@ -43,3 +43,11 @@ def plot_value_and_policy(value_grid, policy_grid, iteration):
     ax.set_title('Iteration: ' + str(iteration))
 
     plt.show()
+
+def plot_transition_matrix(transition_matrix):
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(transition_matrix, cmap='vlag', annot=False, fmt=".2f")
+    plt.title('Transition Matrix Heatmap')
+    plt.xlabel('State j')
+    plt.ylabel('State i')
+    plt.show()

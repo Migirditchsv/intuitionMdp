@@ -1,16 +1,10 @@
 import numpy as np
 
 
-def policy_value_iteration(initialCondition, stochasticity, movement_cost_scale):
+def policy_value_iteration(initialCondition, action_space, stochasticity, movement_cost_scale):
     N = len(initialCondition)  # Size of the grid
     value_grid = np.copy(initialCondition)  # Copy the initial conditions to the value grid
     movement_cost = movement_cost_scale / (2 * N)  # Movement cost for non-stationary actions
-
-    # Expanded directions including diagonals
-    directions = {
-        'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
-        'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1)
-    }
 
     # Initialize grids for values and policies, and max_delta_value
     new_value_grid = np.zeros((N, N))
@@ -28,7 +22,7 @@ def policy_value_iteration(initialCondition, stochasticity, movement_cost_scale)
             else:
                 values = []
                 actions = []
-                for action, (dx, dy) in directions.items():
+                for action, (dx, dy) in action_space.items():
                     new_x, new_y = i + dx, j + dy
                     # Ensure the new state is within bounds and not a wall
                     if 0 <= new_x < N and 0 <= new_y < N and initialCondition[new_x][new_y] != -1:
@@ -56,16 +50,10 @@ def policy_value_iteration(initialCondition, stochasticity, movement_cost_scale)
     return new_value_grid, policy_grid, max_delta_value
 
 
-def policy_value_iteration_ranked_partial_update(initialCondition, stochasticity, movement_cost_scale, update_indices):
+def policy_value_iteration_ranked_partial_update(initialCondition, action_space, stochasticity, movement_cost_scale, update_indices):
     N = len(initialCondition)  # Size of the grid
     value_grid = np.copy(initialCondition)  # Copy the initial conditions to the value grid
     movement_cost = movement_cost_scale / (2 * N)  # Movement cost for non-stationary actions
-
-    # Expanded directions including diagonals
-    directions = {
-        'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
-        'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1)
-    }
 
     # Initialize grids for values and policies, and max_delta_value
     new_value_grid = np.zeros((N, N))
@@ -85,7 +73,7 @@ def policy_value_iteration_ranked_partial_update(initialCondition, stochasticity
         else:
             values = []
             actions = []
-            for action, (dx, dy) in directions.items():
+            for action, (dx, dy) in action_space.items():
                 new_x, new_y = i + dx, j + dy
                 # Ensure the new state is within bounds and not a wall
                 if 0 <= new_x < N and 0 <= new_y < N and initialCondition[new_x][new_y] != -1:

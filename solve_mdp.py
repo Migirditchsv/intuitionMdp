@@ -1,14 +1,21 @@
-from generate_initial_state import generate_initial_values, generate_null_policy_fixed, generate_initial_values_simplex
-from policy_value_iteration import policy_value_iteration
-from visualization import plot_value_and_policy
+from src.generate_initial_state import generate_null_policy_fixed, generate_initial_values_simplex
+from src.policy_value_iteration import policy_value_iteration
+from src.visualization import plot_value_and_policy, plot_transition_matrix
+from src.mfpt import construct_transition_matrix
 
 # Operational Parameters
 max_iterations = 100
 convergence_threshold = 0.001
 
 # World Model Parameters
-size = 25
+size = 20
 goal_number = 5
+stochasticity = 0.5  # Instead of a transition matrix, we use a stochasticity parameter
+movement_cost_scale = 5.0  # Scaling factor for movement cost
+action_space = {
+    'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
+    'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)
+}
 
 # Simple wall placement parameters
 density = 0.2  # Probability a cell will be a goal using simple random placement (not used with simplex noise)
@@ -25,9 +32,9 @@ persistence = 1.0  # Affects the amplitude of each octave. Lower values result i
 lacunarity = 3.0  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical and can
 # produce a natural-looking pattern.
 threshold = 0.1  # The threshold value for wall placement. Higher values result in fewer walls.
-# MDP Parameters
-stochasticity = 0.5  # Instead of a transition matrix, we use a stochasticity parameter
-movement_cost_scale = 5.0  # Scaling factor for movement cost
+
+
+
 
 # Generate the initial value array using Perlin noise
 initial_value_array = generate_initial_values_simplex(size, goal_number, scale, octaves, persistence, lacunarity, threshold)
@@ -44,8 +51,11 @@ policy_array = initial_policy
 max_delta_value = float('inf')
 iteration_count = 0
 while max_delta_value > convergence_threshold and iteration_count < max_iterations:
+    # Compute the mean first passage time for the current policy
+    transition_matrix = construct_transition_matrix(policy_array, action_space, stochasticity)
+    plot_transition_matrix(transition_matrix)
     # Run the policy and value iteration algorithm
-    value_array, policy_array, max_delta_value = policy_value_iteration(value_array, stochasticity, movement_cost_scale)
+    value_array, policy_array, max_delta_value = policy_value_iteration(value_array, action_space, stochasticity, movement_cost_scale)
     # Re-plot with Seaborn's styling and the 'rocket' color scheme
     # plot_value_and_policy_seaborn(value_array, policy_array)
     iteration_count += 1
