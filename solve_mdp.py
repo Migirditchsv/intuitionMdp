@@ -1,15 +1,15 @@
 from src.generate_initial_state import generate_null_policy_fixed, generate_initial_values_simplex
 from src.policy_value_iteration import policy_value_iteration
-from src.visualization import plot_value_and_policy, plot_transition_matrix
-from src.mfpt import construct_transition_matrix
+from src.visualization import plot_value_and_policy, plot_transition_matrix, plot_mu_matrix
+from src.mfpt import construct_transition_matrix, compute_mfpt
 
 # Operational Parameters
 max_iterations = 100
 convergence_threshold = 0.001
 
 # World Model Parameters
-size = 20
-goal_number = 5
+size = 5
+goal_number = 1
 stochasticity = 0.5  # Instead of a transition matrix, we use a stochasticity parameter
 movement_cost_scale = 5.0  # Scaling factor for movement cost
 action_space = {
@@ -31,7 +31,7 @@ persistence = 1.0  # Affects the amplitude of each octave. Lower values result i
 # 0.6 are often suitable.
 lacunarity = 3.0  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical and can
 # produce a natural-looking pattern.
-threshold = 0.1  # The threshold value for wall placement. Higher values result in fewer walls.
+threshold = 0.9  # The threshold value for wall placement. Higher values result in fewer walls.
 
 
 
@@ -43,7 +43,7 @@ initial_value_array = generate_initial_values_simplex(size, goal_number, scale, 
 initial_policy = generate_null_policy_fixed(initial_value_array)
 
 # Plot the initial value array and policy
-# plot_value_and_policy(initial_value_array, initial_policy, 0)
+plot_value_and_policy(initial_value_array, initial_policy, 0)
 
 # Run the policy and value iteration algorithm until the delta value is below the threshold
 value_array = initial_value_array
@@ -52,8 +52,8 @@ max_delta_value = float('inf')
 iteration_count = 0
 while max_delta_value > convergence_threshold and iteration_count < max_iterations:
     # Compute the mean first passage time for the current policy
-    transition_matrix = construct_transition_matrix(policy_array, action_space, stochasticity)
-    plot_transition_matrix(transition_matrix)
+    mu = compute_mfpt(policy_array, action_space, stochasticity)
+    #plot_mu_matrix(mu)
     # Run the policy and value iteration algorithm
     value_array, policy_array, max_delta_value = policy_value_iteration(value_array, action_space, stochasticity, movement_cost_scale)
     # Re-plot with Seaborn's styling and the 'rocket' color scheme
@@ -63,3 +63,4 @@ while max_delta_value > convergence_threshold and iteration_count < max_iteratio
 print("Converged to a solution in", iteration_count, "steps")
 
 plot_value_and_policy(value_array, policy_array, iteration_count)
+plot_mu_matrix(mu)

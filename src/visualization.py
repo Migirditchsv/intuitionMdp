@@ -51,3 +51,11 @@ def plot_transition_matrix(transition_matrix):
     plt.xlabel('State j')
     plt.ylabel('State i')
     plt.show()
+
+def plot_mu_matrix(mu_matrix):
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(mu_matrix, cmap='rocket', annot=True, fmt=".2f")
+    plt.title('Mu Matrix Heatmap')
+    plt.xlabel('State j')
+    plt.ylabel('State i')
+    plt.show()

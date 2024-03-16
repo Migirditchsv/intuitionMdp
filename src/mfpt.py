@@ -1,5 +1,9 @@
 import numpy as np
+from scipy.sparse.linalg import spsolve
+from scipy.sparse import csr_matrix, diags
 from src.math_utils import add_tuples
+from src.visualization import plot_transition_matrix
+
 
 def construct_transition_matrix(policy_grid, action_space, stochasticity):
     # The following code is based on (Debnath 2019 paper, eq 8). It constructs the transition matrix for the given policy
@@ -45,3 +49,47 @@ def construct_transition_matrix(policy_grid, action_space, stochasticity):
 
     return transition_matrix
 
+def compute_mfpt(policy_grid, action_space, stochasticity):
+
+    # Construct the transition matrix
+    transition_matrix = construct_transition_matrix(policy_grid, action_space, stochasticity)
+    #plot_transition_matrix(transition_matrix)
+    if is_singular(transition_matrix):
+        print("WARNING: The transition matrix is singular, and the mean first passage time cannot be computed."
+              "\n Adding a small constant to the diagonal elements to remove singularity.")
+        transition_matrix = remove_singularity(transition_matrix)
+    # Convert T to a sparse matrix in CSR format
+    T_sparse = csr_matrix(transition_matrix)
+
+    # Create a negative vector of ones
+    id_vector = -np.ones(transition_matrix.shape[0])
+
+    # Solve the system
+    mu = spsolve(T_sparse, id_vector)
+
+    # Reshape mu into an NxN matrix
+    N = int(np.sqrt(len(mu)))
+    mu_matrix = np.zeros((N, N))
+    for i in range(N):
+        for j in range(N):
+            mu_matrix[i][j] = mu[i * N + j]
+
+    return mu_matrix
+
+def is_singular(matrix):
+    if np.linalg.matrix_rank(matrix) < min(matrix.shape):
+        return True
+    else:
+        return False
+
+def remove_singularity(mtx):
+    # Convert mtx to a sparse matrix in CSR format
+    mtx_sparse = csr_matrix(mtx)
+
+    # Add a small constant to the diagonal elements
+    mtx_sparse = mtx_sparse + diags([1e-10] * mtx_sparse.shape[0], 0)
+
+    # Convert the sparse matrix back to a dense matrix
+    mtx = mtx_sparse.toarray()
+
+    return mtx
