@@ -5,6 +5,7 @@ from src.generate_initial_state import generate_simple_initial_value, generate_i
 from src.mfpt import compute_mfpt
 from src.visualization import plot_transition_matrix, plot_value_and_policy, plot_mu_matrix
 import pickle
+import numpy as np
 
 from src.worldModel import WorldModel
 
@@ -60,18 +61,26 @@ class MDP:
         self.iterations = 0
         self.value_array = self.world_model.get_world_map()
         self.policy_array = generate_null_policy_fixed(self.value_array)
+        self.update_states = [index for index, value in np.ndenumerate(self.world_model.get_world_map())]
 
     def solve(self):
         # Generate the initial policy array as a null policy, stationary.
-        policy_array = generate_null_policy_fixed(self.world_map)
+        policy_array = generate_null_policy_fixed(self.world_model.get_world_map())
         max_delta_value = float('inf')
         self.iteration_count = 0
         while max_delta_value > self.convergence_threshold and self.iteration_count < self.max_iterations:
             # 1) Update the value array under the current policy
-            self.value_array, max_delta_value = value_iteration_step(policy_array, self.value_array, self.action_space,
-                                                                     self.stochasticity)
+            self.value_array, max_delta_value = value_iteration_step(self.world_model,
+                                                                     self.value_array,
+                                                                     self.policy_array,
+                                                                     self.gamma,
+                                                                     self.update_states)
             # 2) Update the policy array based on the updated value array
-            self.policy_array = policy_iteration_step(self.value_array, self.policy_array, self.action_space)
+            self.policy_array = policy_iteration_step(self.world_model,
+                                                                     self.value_array,
+                                                                     self.policy_array,
+                                                                     self.gamma,
+                                                                     self.update_states)
             # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
             # minimize the mean first passage time.
             if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
@@ -83,7 +92,8 @@ class MDP:
         print("Converged to a solution in", self.iteration_count, "steps")
 
         plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
-        plot_mu_matrix(self.mfpt_array)
+        if self.use_mfpt:
+            plot_mu_matrix(self.mfpt_array)
 
     # Write data to a pickle file
     def write_to_file(self, filename):

@@ -62,10 +62,10 @@ class WorldModel:
         return self.goal_number
 
     def get_world_map(self):
-        return self.world_map
+        return self.world_map.copy()
 
     def get_action_space(self):
-        return self.action_space
+        return self.action_space.copy()
 
     # Setter methods
     def set_wall_reward(self, wall_reward):
