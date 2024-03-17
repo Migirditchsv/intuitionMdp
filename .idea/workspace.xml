@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="integrated world model into mdp, and cleaned up init method">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Runs end to end. PV iteration solver error is produceing bad values and policies.">
+      <change beforePath="$PROJECT_DIR$/src/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/example.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/policy_value_iteration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/policy_value_iteration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/worldModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldModel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,7 +249,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710715279495</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Runs end to end. PV iteration solver error is produceing bad values and policies.">
+      <option name="closed" value="true" />
+      <created>1710716569061</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1710716569061</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -267,7 +273,8 @@
     <MESSAGE value="policy and mfpt policy updates done" />
     <MESSAGE value="finished the MDP solve method" />
     <MESSAGE value="integrated world model into mdp, and cleaned up init method" />
-    <option name="LAST_COMMIT_MESSAGE" value="integrated world model into mdp, and cleaned up init method" />
+    <MESSAGE value="Runs end to end. PV iteration solver error is produceing bad values and policies." />
+    <option name="LAST_COMMIT_MESSAGE" value="Runs end to end. PV iteration solver error is produceing bad values and policies." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

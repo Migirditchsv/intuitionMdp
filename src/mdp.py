@@ -64,6 +64,8 @@ class MDP:
         self.update_states = [index for index, value in np.ndenumerate(self.world_model.get_world_map())]
 
     def solve(self):
+        # Plot initial world map
+        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
         # Generate the initial policy array as a null policy, stationary.
         policy_array = generate_null_policy_fixed(self.world_model.get_world_map())
         max_delta_value = float('inf')
@@ -88,6 +90,8 @@ class MDP:
                 self.policy_array = policy_iteration_mfpt_step(self, self.value_array, self.policy_array, self.mfpt_array)
             # Update the iterations
             self.iteration_count += 1
+            # Plot updated value and policy arrays
+            plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
 
         print("Converged to a solution in", self.iteration_count, "steps")
 
