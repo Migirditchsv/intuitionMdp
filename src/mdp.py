@@ -6,6 +6,8 @@ from src.mfpt import compute_mfpt
 from src.visualization import plot_transition_matrix, plot_value_and_policy, plot_mu_matrix
 import pickle
 
+from src.worldModel import WorldModel
+
 
 class MDP:
     def __init__(self, size, stochasticity, goal_number, use_mfpt, random_seed):
@@ -28,30 +30,36 @@ class MDP:
         self.size = size
         self.stochasticity = stochasticity
         self.goal_number = goal_number
-        self.world_map = generate_world_map(size, goal_number, random_seed)
-        self.action_space = {
-            'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
-            'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)
-        }
+        # Parameters for simple wall placement
+        self.density = 0.2  # Probability a cell will be a wall using simple random placement (not used with simplex
+        # noise)
+        self.wall_clustering = 0.35  # Probability a new wall will be placed adjacent to an existing wall using
+        # simple random
+        # Simplex noise parameters for wall placement
+        self.scale = size / 10  # Controls the level of detail (smaller values generate larger "blobs" of walls)
+        # 1/10th of the world size
+        # is a good starting point
+        self.octaves = 5  # Adds detail at different scales, values of 3-5 offer a good balance of uniformity and
+        # complexity
+        self.persistence = 0.5  # Affects the amplitude of each octave. Lower values result in smoother,
+        # less pronounced noise, while higher values make each octave's contribution more significant. For moderate
+        # density, values around 0.4 to 0.6 are often suitable.
+        self.lacunarity = 2.5  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical
+        # and can
+        # produce a natural-looking pattern.
+        self.threshold = 0.5  # The threshold value for wall placement. Higher values result in fewer walls.
+
+        ############################
+        # Init World Model
+        ############################
+        self.world_model = WorldModel(self.size, self.stochasticity, self.goal_number, self.wall_clustering, self.density)
+
         ############################
         # Tracking & solution variables
         ############################
         self.iterations = 0
-        self.value_array = self.world_map
-        self.policy_array = generate_null_policy_fixed(self.world_map)
-        # Parameters for simple wall placement
-        self.density = 0.2  # Probability a cell will be a wall using simple random placement (not used with simplex noise)
-        self.wall_clustering = 0.35  # Probability a new wall will be placed adjacent to an existing wall using simple random
-        # Simplex noise parameters for wall placement
-        self.scale = size / 10  # Controls the level of detail (smaller values generate larger "blobs" of walls) 1/10th of the world size
-        # is a good starting point
-        self.octaves = 5  # Adds detail at different scales, values of 3-5 offer a good balance of uniformity and complexity
-        self.persistence = 0.5  # Affects the amplitude of each octave. Lower values result in smoother, less pronounced noise,
-        # while higher values make each octave's contribution more significant. For moderate density, values around 0.4 to
-        # 0.6 are often suitable.
-        self.lacunarity = 2.5  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical and can
-        # produce a natural-looking pattern.
-        self.threshold = 0.5  # The threshold value for wall placement. Higher values result in fewer walls.
+        self.value_array = self.world_model.get_world_map()
+        self.policy_array = generate_null_policy_fixed(self.value_array)
 
     def solve(self):
         # Generate the initial policy array as a null policy, stationary.
