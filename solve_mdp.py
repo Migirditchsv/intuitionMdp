@@ -6,13 +6,13 @@ from src.mfpt import construct_transition_matrix, compute_mfpt
 
 # Operational Parameters
 max_iterations = 25
-convergence_threshold = 0.001
+convergence_threshold = 0.01
 
 # World Model Parameters
-size = 30  # Size of the grid
+size = 25  # Size of the grid
 goal_number = 1
-stochasticity = 0.1  # Instead of a transition matrix, we use a stochasticity parameter
-movement_cost_scale = 0.1  # Scaling factor for movement cost
+stochasticity = 0.3  # Instead of a transition matrix, we use a stochasticity parameter
+movement_cost_scale = 0.01  # Scaling factor for movement cost
 action_space = {
     'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
     'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)

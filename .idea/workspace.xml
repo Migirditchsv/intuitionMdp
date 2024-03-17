@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Debnath transition matrix built">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="fixed mfpt calculation. Bug in mdp policy value iteration solver">
+      <change afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solve_mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/solve_mdp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generate_initial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_initial_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mfpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mfpt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/visualization.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,22 +34,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.Python tests in unit_tests.py.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.mfpt.executor": "Debug",
-    "Python.solve_mdp.executor": "Run",
-    "Python.unit_tests.executor": "Run",
-    "Python.visualization.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Sam/PycharmProjects/intuitionMdp/solve_mdp.py",
-    "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.Python tests in unit_tests.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mfpt.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.solve_mdp.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unit_tests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.visualization.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sam/PycharmProjects/intuitionMdp/solve_mdp.py&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Sam\PycharmProjects\intuitionMdp\src" />
@@ -147,14 +146,23 @@
       <option name="project" value="LOCAL" />
       <updated>1710570635420</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fixed mfpt calculation. Bug in mdp policy value iteration solver">
+      <option name="closed" value="true" />
+      <created>1710638284983</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710638284983</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Simplex noise working" />
     <MESSAGE value="Switching to laptop" />
     <MESSAGE value="Debnath transition matrix built" />
-    <option name="LAST_COMMIT_MESSAGE" value="Debnath transition matrix built" />
+    <MESSAGE value="fixed mfpt calculation. Bug in mdp policy value iteration solver" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed mfpt calculation. Bug in mdp policy value iteration solver" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -166,7 +174,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/visualization.py</url>
-          <line>56</line>
+          <line>59</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>

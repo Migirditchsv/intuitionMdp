@@ -2,7 +2,12 @@ import random
 import numpy as np
 from noise import snoise2
 
-def generate_simple_initial_value(size):
+def generate_simple_initial_value(size, random_seed=None):
+
+    # Set the random seed if provided
+    if random_seed is not None:
+        random.seed(random_seed)
+
     # Create a size x size array filled with zeros
     array = np.zeros((size, size))
 
