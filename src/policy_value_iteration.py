@@ -115,14 +115,14 @@ def get_next_states(state, policy_action, action_space, state_space, stochastici
     return next_states
 
 def reward(state, action, next_state, state_space):
-    wall_punishment = -1
+    wall_reward = -1
     goal_reward = 1
     stationary_reward = 0
-    movement_cost = -0.01
+    movement_reward = -0.01
 
     # Check if state and next_state are the same and action is non-stationary
     if state == next_state and action != (0, 0):
-        return wall_punishment
+        return wall_reward
 
     # Check if next_state is a goal state and action is non-stationary
     if state_space[next_state[0]][next_state[1]] == 1 and action != (0, 0):
@@ -133,4 +133,4 @@ def reward(state, action, next_state, state_space):
         return stationary_reward
 
     # If none of the above conditions are met, return movement_cost
-    return movement_cost
+    return movement_reward

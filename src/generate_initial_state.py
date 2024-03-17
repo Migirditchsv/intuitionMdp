@@ -19,7 +19,14 @@ def generate_simple_initial_value(size, random_seed=None):
 
     return array
 
-def generate_initial_values(size, goal_number, density, wall_clustering, random_seed=None):
+def generate_world_map(size, goal_number,
+                       density, # Probability a cell will be a wall
+                       wall_clustering, # Probability a new wall will be placed adjacent to an existing wall
+                       wall_value, # Value denotating a cell is a wall. Note: This value is not used in VP iteration
+                       goal_value, # Value denotating a cell is a goal. Note: This value is not used in VP iteration
+                       empty_value, # Initial value for empty cells. This value IS used in VP iteration
+                       random_seed=None # Random seed for reproducibility
+                       ):
     # Set the random seed if provided
     if random_seed is not None:
         random.seed(random_seed)
@@ -32,7 +39,7 @@ def generate_initial_values(size, goal_number, density, wall_clustering, random_
     while goals_placed < goal_number:
         x, y = random.randint(0, size - 1), random.randint(0, size - 1)
         if grid[x, y] == 0:  # Ensure not placing a goal on top of another goal
-            grid[x, y] = 1
+            grid[x, y] = goal_value
             goals_placed += 1
 
     # Calculate the number of walls to be placed
@@ -45,7 +52,7 @@ def generate_initial_values(size, goal_number, density, wall_clustering, random_
         if walls_placed == 0:  # Place the first wall randomly
             x, y = random.randint(0, size - 1), random.randint(0, size - 1)
             if grid[x, y] == 0:  # Ensure not placing a wall on a goal
-                grid[x, y] = -1
+                grid[x, y] = wall_value
                 walls_placed += 1
         else:
             # Try to cluster walls based on wall_clustering probability

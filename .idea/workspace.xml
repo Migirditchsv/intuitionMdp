@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Basic MDP class structure cleaned up">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="reward and transition functions defined">
+      <change beforePath="$PROJECT_DIR$/solve_mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/solve_mdp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generate_initial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_initial_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/policy_value_iteration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/policy_value_iteration.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710652749276</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="reward and transition functions defined">
+      <option name="closed" value="true" />
+      <created>1710706758272</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1710706758272</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -178,7 +188,8 @@
     <MESSAGE value="fixed mfpt calculation. Bug in mdp policy value iteration solver" />
     <MESSAGE value="Basic MDP class structure in place" />
     <MESSAGE value="Basic MDP class structure cleaned up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic MDP class structure cleaned up" />
+    <MESSAGE value="reward and transition functions defined" />
+    <option name="LAST_COMMIT_MESSAGE" value="reward and transition functions defined" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

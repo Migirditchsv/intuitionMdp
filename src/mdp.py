@@ -1,6 +1,6 @@
 from src.policy_value_iteration import policy_value_iteration
 from src.generate_initial_state import generate_simple_initial_value, generate_initial_values_simplex, \
-    generate_null_policy_fixed, generate_initial_values
+    generate_null_policy_fixed, generate_world_map
 from src.mfpt import compute_mfpt
 from src.visualization import plot_transition_matrix, plot_value_and_policy, plot_mu_matrix
 import pickle
@@ -27,7 +27,7 @@ class MDP:
         self.size = size
         self.stochasticity = stochasticity
         self.goal_number = goal_number
-        self.initial_value_array = generate_initial_values(size, goal_number, random_seed)
+        self.world_map = generate_world_map(size, goal_number, random_seed)
         self.action_space = {
             'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
             'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)
@@ -36,8 +36,8 @@ class MDP:
         # Tracking & solution variables
         ############################
         self.iterations = 0
-        self.value_array = self.initial_value_array
-        self.policy_array = generate_null_policy_fixed(self.initial_value_array)
+        self.value_array = self.world_map
+        self.policy_array = generate_null_policy_fixed(self.world_map)
         # Parameters for simple wall placement
         self.density = 0.2  # Probability a cell will be a wall using simple random placement (not used with simplex noise)
         self.wall_clustering = 0.35  # Probability a new wall will be placed adjacent to an existing wall using simple random
@@ -54,7 +54,7 @@ class MDP:
 
     def solve(self):
         # Generate the initial policy array as a null policy, stationary.
-        policy_array = generate_null_policy_fixed(self.initial_value_array)
+        policy_array = generate_null_policy_fixed(self.world_map)
         max_delta_value = float('inf')
         self.iteration_count = 0
         while max_delta_value > self.convergence_threshold and self.iteration_count < self.max_iterations:
@@ -62,11 +62,11 @@ class MDP:
             for i in range(self.size):
                 for j in range(self.size):
                     # Skip walls and goals
-                    if self.initial_value_array[i, j] == -1 or self.initial_value_array[i, j] == 1:
+                    if self.world_map[i, j] == -1 or self.world_map[i, j] == 1:
                         continue
                     # Update the value array based on the current policy
-                    self.value_array[i, j] = self.initial_value_array[i, j] + self.gamma * self.stochasticity * (
-                            self.value_array[i, j] - self.initial_value_array[i, j])
+                    self.value_array[i, j] = self.world_map[i, j] + self.gamma * self.stochasticity * (
+                            self.value_array[i, j] - self.world_map[i, j])
             # 2) Update the policy array based on the updated value array
             # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
             # minimize the mean first passage time.
