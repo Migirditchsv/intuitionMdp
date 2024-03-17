@@ -4,7 +4,7 @@ import numpy as np
 def policy_value_iteration(initialCondition, action_space, stochasticity, movement_cost_scale):
     N = len(initialCondition)  # Size of the grid
     value_grid = np.copy(initialCondition)  # Copy the initial conditions to the value grid
-    movement_cost = movement_cost_scale / (2 * N)  # Movement cost for non-stationary actions
+    movement_cost = - movement_cost_scale / (N * N)  # Movement cost for non-stationary actions
 
     # Initialize grids for values and policies, and max_delta_value
     new_value_grid = np.zeros((N, N))

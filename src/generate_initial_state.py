@@ -2,6 +2,17 @@ import random
 import numpy as np
 from noise import snoise2
 
+def generate_simple_initial_value(size):
+    # Create a size x size array filled with zeros
+    array = np.zeros((size, size))
+
+    # Calculate the center of the array
+    center = size // 2
+
+    # Set the center cell to 1 (goal state)
+    array[center][center] = 1
+
+    return array
 
 def generate_initial_values(size, goal_number, density, wall_clustering):
     # Initialize the grid

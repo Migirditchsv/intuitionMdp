@@ -1,17 +1,18 @@
-from src.generate_initial_state import generate_null_policy_fixed, generate_initial_values_simplex
+from src.generate_initial_state import generate_null_policy_fixed, generate_initial_values_simplex, \
+    generate_initial_values, generate_simple_initial_value
 from src.policy_value_iteration import policy_value_iteration
 from src.visualization import plot_value_and_policy, plot_transition_matrix, plot_mu_matrix
 from src.mfpt import construct_transition_matrix, compute_mfpt
 
 # Operational Parameters
-max_iterations = 100
+max_iterations = 25
 convergence_threshold = 0.001
 
 # World Model Parameters
-size = 5
+size = 30  # Size of the grid
 goal_number = 1
-stochasticity = 0.5  # Instead of a transition matrix, we use a stochasticity parameter
-movement_cost_scale = 5.0  # Scaling factor for movement cost
+stochasticity = 0.1  # Instead of a transition matrix, we use a stochasticity parameter
+movement_cost_scale = 0.1  # Scaling factor for movement cost
 action_space = {
     'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
     'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)
@@ -23,15 +24,15 @@ wall_clustering = 0.45  # Probability a new wall will be placed adjacent to an e
 # placement (not used with simplex noise)
 
 # Simplex noise parameters for wall placement
-scale = 0.5  # Controls the level of detail (smaller values generate larger "blobs" of walls) 1/10th of the world size
+scale = size / 10  # Controls the level of detail (smaller values generate larger "blobs" of walls) 1/10th of the world size
 # is a good starting point
 octaves = 5  # Adds detail at different scales, values of 3-5 offer a good balance of uniformity and complexity
-persistence = 1.0  # Affects the amplitude of each octave. Lower values result in smoother, less pronounced noise,
+persistence = 0.5  # Affects the amplitude of each octave. Lower values result in smoother, less pronounced noise,
 # while higher values make each octave's contribution more significant. For moderate density, values around 0.4 to
 # 0.6 are often suitable.
-lacunarity = 3.0  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical and can
+lacunarity = 2.5  # Controls the frequency growth for each octave. A value around 2.0 to 3.0 is typical and can
 # produce a natural-looking pattern.
-threshold = 0.9  # The threshold value for wall placement. Higher values result in fewer walls.
+threshold = 0.5 # The threshold value for wall placement. Higher values result in fewer walls.
 
 
 
@@ -53,7 +54,7 @@ iteration_count = 0
 while max_delta_value > convergence_threshold and iteration_count < max_iterations:
     # Compute the mean first passage time for the current policy
     mu = compute_mfpt(policy_array, action_space, stochasticity)
-    #plot_mu_matrix(mu)
+
     # Run the policy and value iteration algorithm
     value_array, policy_array, max_delta_value = policy_value_iteration(value_array, action_space, stochasticity, movement_cost_scale)
     # Re-plot with Seaborn's styling and the 'rocket' color scheme
