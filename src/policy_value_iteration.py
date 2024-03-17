@@ -57,7 +57,6 @@ def value_iteration_step(world_model, value_grid, policy_grid, update_states=Non
     # Initialize grids for values and policies, and max_delta_value
     N = len(value_grid)  # Size of the grid
     new_value_grid = value_grid.copy()
-    max_delta_value = 0  # To track the maximum change in value
 
     # Iterate over each state in the grid if
     if update_states is None:
@@ -83,6 +82,81 @@ def value_iteration_step(world_model, value_grid, policy_grid, update_states=Non
             new_value_grid[state] = value
     return new_value_grid
 
+def policy_iteration_step(world_model, value_grid, policy_grid, update_states=None):
+    # Ensure world_model.state_space, value_grid, and policy_grid are all the same size
+    assert len(world_model.state_space) == len(value_grid) == len(policy_grid)
+
+    # Initialize grids for values and policies, and max_delta_value
+    N = len(value_grid)  # Size of the grid
+    new_policy_grid = policy_grid.copy()
+
+    # Iterate over each state in the grid if
+    if update_states is None:
+        update_states = [(i, j) for i in range(N) for j in range(N)]
+    for state in update_states: # Update the policy for each state
+        if world_model.state_space[state] == world_model.goal_value:  # Goal state
+            continue
+        elif world_model.state_space[state] == world_model.wall_value:  # Wall
+            continue
+        else:
+            max_value = -float('inf')
+            best_action = new_policy_grid[state]
+            for action in world_model.action_space.values(): # Check the value of each action
+                value= 0.0 # Initialize value for the action
+                next_states = get_next_states(state, action, world_model)
+                for new_state, prob in next_states.items(): # Check value contribution from each possible next state under the action
+                    # Ensure the new state is within bounds
+                    if 0 <= new_state[0] < N and 0 <= new_state[1] < N:
+                        reward = get_reward(state, policy_grid[state], new_state, world_model)
+                        value += prob * (reward + world_model.gamma * value_grid[new_state])  # Bellman equation
+                    else:
+                        # State is out of bounds
+                        print("WARNING: State is out of bounds during value iteration transition from "
+                              , state, " to ", new_state, " under action ", policy_grid[state])
+                        exit(1)
+                    if value > max_value:
+                        max_value = value
+                        best_action = action
+            new_policy_grid[state] = best_action
+    return new_policy_grid
+
+def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array, update_states=None):
+    # Ensure world_model.state_space, value_grid, and policy_grid are all the same size
+    assert len(world_model.state_space) == len(value_grid) == len(policy_grid)
+
+    # Initialize grids for values and policies, and max_delta_value
+    N = len(value_grid)  # Size of the grid
+    new_policy_grid = policy_grid.copy()
+
+    # Iterate over each state in the grid if
+    if update_states is None:
+        update_states = [(i, j) for i in range(N) for j in range(N)]
+    for state in update_states: # Update the policy for each state
+        if world_model.state_space[state] == world_model.goal_value:  # Goal state
+            continue
+        elif world_model.state_space[state] == world_model.wall_value:  # Wall
+            continue
+        else:
+            min_mfpt_value = float('inf')
+            best_action = new_policy_grid[state]
+            for action in world_model.action_space.values(): # Check the value of each action
+                mfpt_value= 0.0 # Initialize value for the action
+                next_states = get_next_states(state, action, world_model)
+                for new_state, prob in next_states.items(): # Check expected MFPT value for each possible next state
+                    # under the action
+                    # Ensure the new state is within bounds
+                    if 0 <= new_state[0] < N and 0 <= new_state[1] < N:
+                        mfpt_value += prob * mfpt_array[new_state] # Contribution to the expected MFPT value of the action
+                    else:
+                        # State is out of bounds
+                        print("WARNING: State is out of bounds during value iteration transition from "
+                              , state, " to ", new_state, " under action ", policy_grid[state])
+                        exit(1)
+                    if mfpt_value < min_mfpt_value:
+                        min_mfpt_value = mfpt_value
+                        best_action = action
+            new_policy_grid[state] = best_action
+    return new_policy_grid
 
 def get_next_states(state, policy_action, world_model):
     next_states = {}
