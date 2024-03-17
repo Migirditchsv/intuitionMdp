@@ -19,7 +19,11 @@ def generate_simple_initial_value(size, random_seed=None):
 
     return array
 
-def generate_initial_values(size, goal_number, density, wall_clustering):
+def generate_initial_values(size, goal_number, density, wall_clustering, random_seed=None):
+    # Set the random seed if provided
+    if random_seed is not None:
+        random.seed(random_seed)
+
     # Initialize the grid
     grid = np.zeros((size, size))
 
