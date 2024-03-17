@@ -1,4 +1,5 @@
-from src.policy_value_iteration import policy_value_iteration
+from src.policy_value_iteration import policy_value_iteration, value_iteration_step, policy_iteration_step, \
+    policy_iteration_mfpt_step
 from src.generate_initial_state import generate_simple_initial_value, generate_initial_values_simplex, \
     generate_null_policy_fixed, generate_world_map
 from src.mfpt import compute_mfpt
@@ -59,32 +60,22 @@ class MDP:
         self.iteration_count = 0
         while max_delta_value > self.convergence_threshold and self.iteration_count < self.max_iterations:
             # 1) Update the value array under the current policy
-            for i in range(self.size):
-                for j in range(self.size):
-                    # Skip walls and goals
-                    if self.world_map[i, j] == -1 or self.world_map[i, j] == 1:
-                        continue
-                    # Update the value array based on the current policy
-                    self.value_array[i, j] = self.world_map[i, j] + self.gamma * self.stochasticity * (
-                            self.value_array[i, j] - self.world_map[i, j])
+            self.value_array, max_delta_value = value_iteration_step(policy_array, self.value_array, self.action_space,
+                                                                     self.stochasticity)
             # 2) Update the policy array based on the updated value array
+            self.policy_array = policy_iteration_step(self.value_array, self.policy_array, self.action_space)
             # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
             # minimize the mean first passage time.
             if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
-                mu = compute_mfpt(policy_array, self.action_space, self.stochasticity)
-
-            # Run the policy and value iteration algorithm
-            value_array, policy_array, max_delta_value = policy_value_iteration(self.value_array, self.action_space,
-                                                                                self.stochasticity,
-                                                                                self.movement_cost_scale)
-            # Re-plot with Seaborn's styling and the 'rocket' color scheme
-            # plot_value_and_policy_seaborn(value_array, policy_array)
+                self.mfpt_array = compute_mfpt(policy_array, self.action_space, self.stochasticity)
+                self.policy_array = policy_iteration_mfpt_step(self, self.value_array, self.policy_array, self.mfpt_array)
+            # Update the iterations
             self.iteration_count += 1
 
         print("Converged to a solution in", self.iteration_count, "steps")
 
-        plot_value_and_policy(value_array, policy_array, self.iteration_count)
-        plot_mu_matrix(mu)
+        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
+        plot_mu_matrix(self.mfpt_array)
 
     # Write data to a pickle file
     def write_to_file(self, filename):

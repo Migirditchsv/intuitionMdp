@@ -58,6 +58,8 @@ def value_iteration_step(world_model, value_grid, policy_grid, update_states=Non
     N = len(value_grid)  # Size of the grid
     new_value_grid = value_grid.copy()
 
+    max_delta_value = 0  # To track the maximum change in value
+
     # Iterate over each state in the grid if
     if update_states is None:
         update_states = [(i, j) for i in range(N) for j in range(N)]
@@ -79,8 +81,12 @@ def value_iteration_step(world_model, value_grid, policy_grid, update_states=Non
                     print("WARNING: State is out of bounds during value iteration transition from "
                           , state, " to ", new_state, " under action ", policy_grid[state])
                     exit(1)
+            # Update the value grid and max_delta_value
+            delta_value = abs(value - value_grid[state])
+            if delta_value > max_delta_value:
+                max_delta_value = delta_value
             new_value_grid[state] = value
-    return new_value_grid
+    return new_value_grid, max_delta_value
 
 def policy_iteration_step(world_model, value_grid, policy_grid, update_states=None):
     # Ensure world_model.state_space, value_grid, and policy_grid are all the same size
