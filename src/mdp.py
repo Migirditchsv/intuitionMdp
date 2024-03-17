@@ -2,30 +2,42 @@ from src.policy_value_iteration import policy_value_iteration
 from src.generate_initial_state import generate_simple_initial_value, generate_initial_values_simplex, \
     generate_null_policy_fixed, generate_initial_values
 from src.mfpt import compute_mfpt
-from src.visualization import plot_transition_matrix, plot_value_and_policy
+from src.visualization import plot_transition_matrix, plot_value_and_policy, plot_mu_matrix
 import pickle
 
 
 class MDP:
     def __init__(self, size, stochasticity, goal_number, use_mfpt, random_seed):
+        ############################
         # Operational Parameters
+        ############################
+        self.iteration_count = 0
         self.max_iterations = 100
         self.convergence_threshold = 0.01
         self.random_seed = random_seed
+        ############################
         # MFPT Parameters
+        ############################
+        self.gamma = 0.9  # Discount factor
         self.use_mfpt = use_mfpt
-        self.iterations_per_mfpt_update = 3 # Debnaith et al. (2019) suggest 3 iterations per MFPT computation
+        self.iterations_per_mfpt_update = 3  # Debnaith et al. (2019) suggest 3 iterations per MFPT computation
+        ############################
         # World Model Parameters
+        ############################
         self.size = size
         self.stochasticity = stochasticity
         self.goal_number = goal_number
-        self.initial_state = generate_initial_values(size, goal_number, random_seed)
+        self.initial_value_array = generate_initial_values(size, goal_number, random_seed)
         self.action_space = {
             'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
             'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)
         }
-        # Tracking variables
+        ############################
+        # Tracking & solution variables
+        ############################
         self.iterations = 0
+        self.value_array = self.initial_value_array
+        self.policy_array = generate_null_policy_fixed(self.initial_value_array)
         # Parameters for simple wall placement
         self.density = 0.2  # Probability a cell will be a wall using simple random placement (not used with simplex noise)
         self.wall_clustering = 0.35  # Probability a new wall will be placed adjacent to an existing wall using simple random
@@ -41,17 +53,30 @@ class MDP:
         self.threshold = 0.5  # The threshold value for wall placement. Higher values result in fewer walls.
 
     def solve(self):
-        policy_array = generate_null_policy_fixed(self.initial_state)
+        # Generate the initial policy array as a null policy, stationary.
+        policy_array = generate_null_policy_fixed(self.initial_value_array)
         max_delta_value = float('inf')
         self.iteration_count = 0
         while max_delta_value > self.convergence_threshold and self.iteration_count < self.max_iterations:
-            # If we are using the MFPT, compute it every few iterations
+            # 1) Update the value array under the current policy
+            for i in range(self.size):
+                for j in range(self.size):
+                    # Skip walls and goals
+                    if self.initial_value_array[i, j] == -1 or self.initial_value_array[i, j] == 1:
+                        continue
+                    # Update the value array based on the current policy
+                    self.value_array[i, j] = self.initial_value_array[i, j] + self.gamma * self.stochasticity * (
+                            self.value_array[i, j] - self.initial_value_array[i, j])
+            # 2) Update the policy array based on the updated value array
+            # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
+            # minimize the mean first passage time.
             if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
                 mu = compute_mfpt(policy_array, self.action_space, self.stochasticity)
 
             # Run the policy and value iteration algorithm
-            value_array, policy_array, max_delta_value = policy_value_iteration(value_array, self.action_space,
-                                                                                self.stochasticity, self.movement_cost_scale)
+            value_array, policy_array, max_delta_value = policy_value_iteration(self.value_array, self.action_space,
+                                                                                self.stochasticity,
+                                                                                self.movement_cost_scale)
             # Re-plot with Seaborn's styling and the 'rocket' color scheme
             # plot_value_and_policy_seaborn(value_array, policy_array)
             self.iteration_count += 1

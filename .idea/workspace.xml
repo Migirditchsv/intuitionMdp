@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Basic MDP class structure in place">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Basic MDP class structure cleaned up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generate_initial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_initial_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710648315126</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Basic MDP class structure cleaned up">
+      <option name="closed" value="true" />
+      <created>1710652749276</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1710652749276</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -170,7 +177,8 @@
     <MESSAGE value="Debnath transition matrix built" />
     <MESSAGE value="fixed mfpt calculation. Bug in mdp policy value iteration solver" />
     <MESSAGE value="Basic MDP class structure in place" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic MDP class structure in place" />
+    <MESSAGE value="Basic MDP class structure cleaned up" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic MDP class structure cleaned up" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -100,4 +100,37 @@ def policy_value_iteration_ranked_partial_update(initialCondition, action_space,
 
     return new_value_grid, policy_grid, max_delta_value
 
+def get_next_states(state, policy_action, action_space, state_space, stochasticity):
+    next_states = {}
+    for action, movement in action_space.items():
+        new_state = (state[0] + movement[0], state[1] + movement[1])
+        if 0 <= new_state[0] < len(state_space) and 0 <= new_state[1] < len(state_space):
+            if state_space[new_state[0]][new_state[1]] == -1: # Wall
+                new_state = state
+                next_states[new_state] = 1.0 # If you bounce off a wall, you stay in the same state with probability 1
+            elif action == policy_action: # Not a wall
+                next_states[new_state] = 1 - stochasticity # Take the policy action with probability 1 - stochasticity
+            else: # A stochastic action has been taken
+                next_states[new_state] = stochasticity
+    return next_states
 
+def reward(state, action, next_state, state_space):
+    wall_punishment = -1
+    goal_reward = 1
+    stationary_reward = 0
+    movement_cost = -0.01
+
+    # Check if state and next_state are the same and action is non-stationary
+    if state == next_state and action != (0, 0):
+        return wall_punishment
+
+    # Check if next_state is a goal state and action is non-stationary
+    if state_space[next_state[0]][next_state[1]] == 1 and action != (0, 0):
+        return goal_reward
+
+    # Check if action is stationary
+    if action == (0, 0):
+        return stationary_reward
+
+    # If none of the above conditions are met, return movement_cost
+    return movement_cost
