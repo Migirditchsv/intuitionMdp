@@ -2,9 +2,9 @@ from src.mdp import MDP
 
 # Define parameters for the MDP
 size = 10
-stochasticity = 0.2
+stochasticity = 0.5
 goal_number = 1
-use_mfpt = False
+use_mfpt = True
 random_seed = 42
 
 # Create an instance of the MDP class

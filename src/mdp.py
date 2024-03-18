@@ -17,7 +17,7 @@ class MDP:
         ############################
         self.policy_unstable = True
         self.iteration_count = 0
-        self.max_iterations = 1000
+        self.max_iterations = 100
         self.convergence_threshold = 1.0 / 10 ** (size * size)
         self.random_seed = random_seed
         ############################

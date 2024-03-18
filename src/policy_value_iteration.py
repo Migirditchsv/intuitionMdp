@@ -81,9 +81,9 @@ def value_iteration_step(world_model, value_grid, policy_grid, gamma=0.9, update
                 new_state = state # Deterministically stay in bounds
             reward = get_reward(state, policy_grid[state], new_state, world_model)
             value += prob * (reward + gamma * value_grid[new_state])  # Bellman equation
-            if value > 1:
-                print("WARNING: Value ", value, " is greater than 1 during value iteration transition from "
-                      , state, " to ", new_state, " under action ", policy_grid[state])
+            # if value > 1:
+            #     print("WARNING: Value ", value, " is greater than 1 during value iteration transition from "
+            #           , state, " to ", new_state, " under action ", policy_grid[state])
         # Update the value grid and max_delta_value
         delta_value = abs(value - value_grid[state])
         if delta_value > max_delta_value:
