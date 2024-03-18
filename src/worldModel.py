@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.generate_initial_state import generate_world_map
+from src.generate_initial_state import generate_world_map, generate_simple_initial_value
 
 
 class WorldModel:

@@ -2,7 +2,7 @@ from src.mdp import MDP
 
 # Define parameters for the MDP
 size = 15
-stochasticity = 0.2
+stochasticity = 0.1
 goal_number = 1
 use_mfpt = False
 random_seed = 42
