@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Fixed bad state. Improved plotting.">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="fixed formatting">
+      <change afterPath="$PROJECT_DIR$/src/generate_training_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/io.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/example.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
@@ -47,7 +49,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Sam/PycharmProjects/intuitionMdp/src/example.py",
+    "last_opened_file_path": "C:/Users/Sam/PycharmProjects/intuitionMdp/src/generate_training_data.py",
     "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
   }
 }]]></component>
@@ -56,7 +58,7 @@
       <recent name="C:\Users\Sam\PycharmProjects\intuitionMdp\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.example">
+  <component name="RunManager" selected="Python.generate_training_data">
     <configuration name="example" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="intuitionMdp" />
       <option name="ENV_FILES" value="" />
@@ -72,6 +74,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/example.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="generate_training_data" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="intuitionMdp" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="intuitionMdp" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/generate_training_data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -129,6 +154,7 @@
       <item itemvalue="Python.main" />
       <item itemvalue="Python.solve_mdp" />
       <item itemvalue="Python.example" />
+      <item itemvalue="Python.generate_training_data" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -307,8 +333,35 @@
       <option name="project" value="LOCAL" />
       <updated>1710739620453</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="set experiment parameters with interesting values">
+      <option name="closed" value="true" />
+      <created>1710740119356</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1710740119356</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fixed formatting">
+      <option name="closed" value="true" />
+      <created>1710740322834</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1710740322834</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Simplex noise working" />
@@ -329,7 +382,9 @@
     <MESSAGE value="Fixed heinous OoB error" />
     <MESSAGE value="Bad state" />
     <MESSAGE value="Fixed bad state. Improved plotting." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bad state. Improved plotting." />
+    <MESSAGE value="set experiment parameters with interesting values" />
+    <MESSAGE value="fixed formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed formatting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -345,9 +400,9 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/mdp.py</url>
-          <line>104</line>
-          <option name="timeStamp" value="46" />
+          <url>file://$PROJECT_DIR$/src/mfpt.py</url>
+          <line>45</line>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

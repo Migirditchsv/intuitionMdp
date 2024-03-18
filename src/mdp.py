@@ -15,10 +15,11 @@ class MDP:
         ############################
         # Operational Parameters
         ############################
+        self.convergence_failure = False
         self.policy_unstable = True
         self.iteration_count = 0
-        self.max_iterations = 100
-        self.convergence_threshold = 1.0 / 10 ** (size * size)
+        self.max_iterations = 1000
+        self.convergence_threshold = 1e-3
         self.random_seed = random_seed
         ############################
         # MFPT Parameters
@@ -63,6 +64,7 @@ class MDP:
         self.value_array = self.world_model.get_world_map()
         self.policy_array = generate_null_policy_fixed(self.value_array)
         self.update_states = [index for index, value in np.ndenumerate(self.world_model.get_world_map())]
+        self.convergence_data = {}
 
     def solve(self):
         # Plot initial world map
@@ -71,7 +73,11 @@ class MDP:
         policy_array = generate_null_policy_fixed(self.world_model.get_world_map())
         max_delta_value = float('inf')
         self.iteration_count = 0
-        while max_delta_value > self.convergence_threshold and self.policy_unstable and self.iteration_count < self.max_iterations:
+        while max_delta_value > self.convergence_threshold and self.policy_unstable:
+            # If max iterations is reached, break
+            if self.iteration_count >= self.max_iterations:
+                self.convergence_failure = True
+                break
             # 1) Update the value array under the current policy
             self.value_array, max_delta_value = value_iteration_step(self.world_model,
                                                                      self.value_array,
@@ -91,19 +97,33 @@ class MDP:
                 self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
             # Update the iterations
             self.iteration_count += 1
-            # Plots for debugging
+
+            # Update the convergence data
+            self.convergence_data[self.iteration_count] = {'value_array': self.value_array,
+                                                           'max_delta_value': max_delta_value}
+
+            # # Plots for debugging
             # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
             # if self.use_mfpt:
             #     self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
             #     plot_mu_matrix(self.mfpt_array)
             #     plot_transition_matrix(t_matrix)
-        print("Converged to a solution in", self.iteration_count, "steps")
 
+        # Plot solution
         plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
         if self.use_mfpt:
             self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
             plot_mu_matrix(self.mfpt_array)
             plot_transition_matrix(t_matrix)
+
+        # Print the number of iterations & convergence status
+        if self.convergence_failure:
+            print("WARNING: Failed to converge to a solution in", self.iteration_count, "steps")
+            return None, None
+        else:
+            print("Converged to a solution in", self.iteration_count, "steps")
+
+        return self.convergence_data, self.value_array
 
     # Write data to a pickle file
     def write_to_file(self, filename):

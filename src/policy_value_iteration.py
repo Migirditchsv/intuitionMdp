@@ -163,8 +163,7 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
                 # under the action
                 # Ensure the new state is within bounds
                 if 0 <= new_state[0] < N and 0 <= new_state[1] < N:
-                    mfpt_value += prob * mfpt_array[
-                        new_state]  # Contribution to the expected MFPT value of the action
+                    mfpt_value += prob * mfpt_array[new_state]  # Contribution to the expected MFPT value of the action
                 else:
                     # State is out of bounds
                     print("WARNING: State is out of bounds during value iteration transition from "
