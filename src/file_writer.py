@@ -6,12 +6,14 @@ import imageio
 import matplotlib.pyplot as plt
 import numpy as np
 
+from src.generate_initial_state import generate_null_policy
+from src.policy_value_iteration import policy_iteration_step
+from src.visualization import plot_value_and_policy
 
-def to_binary(filename, experiment_index, world_seed, size, value_array, max_delta_value, solver_iteration, stochasticity,
-              optimal_value):
+
+def to_binary(filename, experiment_index, iteration, world_model, value_array, max_delta_value, optimal_value):
     with open(filename, 'ab') as f:
-        pickle.dump((experiment_index, world_seed, size, value_array, max_delta_value, solver_iteration, stochasticity,
-                     optimal_value), f)
+        pickle.dump((experiment_index, iteration, world_model, value_array, max_delta_value, optimal_value), f)
 
 
 def from_binary(filename):
@@ -22,18 +24,17 @@ def from_binary(filename):
                 experiment_data = pickle.load(f)
                 experiment = {
                     'experiment_index': experiment_data[0],
-                    'world_seed': experiment_data[1],
-                    'size': experiment_data[2],
+                    'iteration': experiment_data[1],
+                    'world_model': experiment_data[2],
                     'value_array': experiment_data[3],
                     'max_delta_value': experiment_data[4],
-                    'solver_iteration': experiment_data[5],
-                    'stochasticity': experiment_data[6],
-                    'optimal_value': experiment_data[7]
+                    'optimal_value': experiment_data[5]
                 }
                 experiments.append(experiment)
             except EOFError:
                 break
     return experiments
+
 
 def generate_experiment_name(size, stochasticity, use_mfpt):
     # Get the current date and time
@@ -50,34 +51,35 @@ def generate_experiment_name(size, stochasticity, use_mfpt):
 
     return filename
 
-
-def create_heatmap_gifs(filename):
+def create_heatmap_gifs(filename, frame_duration):
     # Load the data from the binary file
+    experiment_index = None
     data = from_binary(filename)
+    # For each unique experiment number, create a gif of the value functions converging as heat maps
+    for data_point in data:
+        # If new experiment has begun, reset the gif counter and filename
+        if data_point['experiment_index'] != experiment_index:
+            experiment_index = data_point['experiment_index']
+            gif_filename = f"{filename}_exp{experiment_index}.gif"
+            writer = imageio.get_writer(gif_filename, mode='I', duration=frame_duration, loop=0)
 
-    # Group the data by unique sample numbers
-    grouped_data = {}
-    for sample_number, world_seed, size, value_array, max_delta_value, solver_iteration, stochasticity, optimal_value in data:
-        if sample_number not in grouped_data:
-            grouped_data[sample_number] = []
-        grouped_data[sample_number].append(
-            (world_seed, size, value_array, max_delta_value, solver_iteration, stochasticity, optimal_value))
+        # Rehydrate the policy grid from the value array
+        policy_grid, _ = policy_iteration_step(data_point['world_model'],
+                                            data_point['value_array'],
+                                            generate_null_policy(data_point['value_array']),
+                                            gamma=0.9
+                                            )
+        fig, ax = plot_value_and_policy(data_point['value_array'],
+                                        policy_grid,
+                                        data_point['iteration'],
+                                        data_point['world_model']
+                                        )
+        # Save the figure as an image
+        plt.savefig("heatmap.png")
+        # Close the figure
+        plt.close(fig)
+        image = imageio.imread("heatmap.png")
+        writer.append_data(image)
 
-    # For each unique sample number, create N gifs of the value functions converging as heat maps
-    for sample_number, experiments in grouped_data.items():
-        for i in range(len(experiments)):
-            world_seed, size, value_array, max_delta_value, solver_iteration, stochasticity, optimal_value = \
-            experiments[i]
-
-            # Create a gif of the value functions converging as a heat map
-            gif_filename = f"{filename}_{sample_number}_{i}.gif"
-            with imageio.get_writer(gif_filename, mode='I') as writer:
-                for value in value_array:
-                    fig, ax = plt.subplots()
-                    heatmap = ax.imshow(value, cmap='hot', interpolation='nearest')
-                    plt.colorbar(heatmap)
-                    plt.savefig("heatmap.png")
-                    plt.close(fig)
-                    image = imageio.imread("heatmap.png")
-                    writer.append_data(image)
-            os.remove("heatmap.png")
+    writer.close()
+    os.remove("heatmap.png")

@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Pickle dataset generation written, untested">
-      <change afterPath="$PROJECT_DIR$/src/file_writer.py" afterDir="false" />
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="pickle parser &amp; animator written">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/solve_mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/solve_mdp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/file_writer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/file_writer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generate_initial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_initial_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/generate_training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_training_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/worldModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/visualization.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +42,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python tests.Python tests in unit_tests.py.executor": "Run",
     "Python.example.executor": "Run",
-    "Python.generate_training_data.executor": "Debug",
+    "Python.generate_training_data.executor": "Run",
     "Python.main.executor": "Run",
     "Python.mfpt.executor": "Debug",
     "Python.solve_mdp.executor": "Run",
@@ -359,7 +360,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710781828098</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="pickle parser &amp; animator written">
+      <option name="closed" value="true" />
+      <created>1710784588016</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1710784588016</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -395,7 +404,8 @@
     <MESSAGE value="set experiment parameters with interesting values" />
     <MESSAGE value="fixed formatting" />
     <MESSAGE value="Pickle dataset generation written, untested" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pickle dataset generation written, untested" />
+    <MESSAGE value="pickle parser &amp; animator written" />
+    <option name="LAST_COMMIT_MESSAGE" value="pickle parser &amp; animator written" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -417,15 +427,15 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/file_writer.py</url>
-          <line>59</line>
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/file_writer.py</url>
-          <line>76</line>
-          <option name="timeStamp" value="49" />
+          <line>53</line>
+          <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="experiments[23]" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

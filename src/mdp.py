@@ -1,7 +1,7 @@
 from src.policy_value_iteration import policy_value_iteration, value_iteration_step, policy_iteration_step, \
     policy_iteration_mfpt_step
 from src.generate_initial_state import generate_simple_initial_value, generate_initial_values_simplex, \
-    generate_null_policy_fixed, generate_world_map
+    generate_null_policy, generate_world_map
 from src.mfpt import compute_mfpt
 from src.visualization import plot_transition_matrix, plot_value_and_policy, plot_mu_matrix
 import pickle
@@ -62,7 +62,7 @@ class MDP:
         ############################
         self.iterations = 0
         self.value_array = self.world_model.get_world_map()
-        self.policy_array = generate_null_policy_fixed(self.value_array)
+        self.policy_array = generate_null_policy(self.value_array)
         self.update_states = [index for index, value in np.ndenumerate(self.world_model.get_world_map())]
         self.convergence_data = {}
 
@@ -70,7 +70,7 @@ class MDP:
         # Plot initial world map
         plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
         # Generate the initial policy array as a null policy, stationary.
-        policy_array = generate_null_policy_fixed(self.world_model.get_world_map())
+        policy_array = generate_null_policy(self.world_model.get_world_map())
         max_delta_value = float('inf')
         self.iteration_count = 0
         while max_delta_value > self.convergence_threshold and self.policy_unstable:
@@ -173,6 +173,9 @@ class MDP:
     def get_action_space(self):
         return self.action_space
 
+    def get_world_model(self):
+        return self.world_model
+
     # Setter methods
     def set_size(self, size):
         self.size = size
@@ -212,3 +215,5 @@ class MDP:
 
     def set_action_space(self, action_space):
         self.action_space = action_space
+
+

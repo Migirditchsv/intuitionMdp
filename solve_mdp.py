@@ -1,4 +1,4 @@
-from src.generate_initial_state import generate_null_policy_fixed, generate_initial_values_simplex, \
+from src.generate_initial_state import generate_null_policy, generate_initial_values_simplex, \
     generate_world_map, generate_simple_initial_value
 from src.policy_value_iteration import policy_value_iteration
 from src.visualization import plot_value_and_policy, plot_transition_matrix, plot_mu_matrix
@@ -41,7 +41,7 @@ threshold = 0.5 # The threshold value for wall placement. Higher values result i
 initial_value_array = generate_initial_values_simplex(size, goal_number, scale, octaves, persistence, lacunarity, threshold)
 
 # Example usage with the previously generated initial value array
-initial_policy = generate_null_policy_fixed(initial_value_array)
+initial_policy = generate_null_policy(initial_value_array)
 
 # Plot the initial value array and policy
 plot_value_and_policy(initial_value_array, initial_policy, 0)

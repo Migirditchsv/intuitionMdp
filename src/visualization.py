@@ -45,7 +45,7 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
     ax.set_yticklabels(range(1, size + 1))
     ax.set_title('Iteration: ' + str(iteration))
 
-    plt.show()
+    return fig, ax
 
 def plot_transition_matrix(transition_matrix):
     plt.figure(figsize=(8, 8))

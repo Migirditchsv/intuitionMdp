@@ -105,7 +105,7 @@ def generate_initial_values_simplex(size, goal_number, scale, octaves, persisten
 
     return map_array
 
-def generate_null_policy_fixed(initial_value_array):
+def generate_null_policy(initial_value_array):
     # Determine the shape from the initial value array
     policy_shape = initial_value_array.shape
     # Initialize an empty array for the policy
