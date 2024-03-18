@@ -10,7 +10,7 @@ class WorldModel:
         self.wall_reward = -1
         self.goal_reward = 1
         self.stationary_reward = 0
-        self.movement_reward = -0.001
+        self.movement_reward = -0.0001
 
         self.wall_value = -1.0
         self.goal_value = 1.0

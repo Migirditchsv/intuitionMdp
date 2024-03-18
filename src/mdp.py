@@ -86,12 +86,12 @@ class MDP:
             # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
             # minimize the mean first passage time.
             if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
-                self.mfpt_array = compute_mfpt(policy_array, self.action_space, self.stochasticity)
-                self.policy_array = policy_iteration_mfpt_step(self, self.value_array, self.policy_array, self.mfpt_array)
+                self.mfpt_array = compute_mfpt(policy_array, self.world_model)
+                self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
             # Update the iterations
             self.iteration_count += 1
-            # Plot updated value and policy arrays
-            plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
+            # # Plot updated value and policy arrays
+            # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
 
         print("Converged to a solution in", self.iteration_count, "steps")
 

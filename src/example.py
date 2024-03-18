@@ -1,7 +1,7 @@
 from src.mdp import MDP
 
 # Define parameters for the MDP
-size = 15
+size = 25
 stochasticity = 0.01
 goal_number = 1
 use_mfpt = False

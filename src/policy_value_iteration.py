@@ -130,8 +130,10 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
     return new_policy_grid
 
 def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array, update_states=None):
+    # Get a copy of the state space
+    state_space = world_model.get_world_map()
     # Ensure world_model.state_space, value_grid, and policy_grid are all the same size
-    assert len(world_model.state_space) == len(value_grid) == len(policy_grid)
+    assert len(state_space) == len(value_grid) == len(policy_grid)
 
     # Initialize grids for values and policies, and max_delta_value
     N = len(value_grid)  # Size of the grid
@@ -141,9 +143,9 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
     if update_states is None:
         update_states = [(i, j) for i in range(N) for j in range(N)]
     for state in update_states: # Update the policy for each state
-        if world_model.state_space[state] == world_model.goal_value:  # Goal state
+        if state_space[state] == world_model.goal_value:  # Goal state
             continue
-        elif world_model.state_space[state] == world_model.wall_value:  # Wall
+        elif state_space[state] == world_model.wall_value:  # Wall
             continue
         else:
             min_mfpt_value = float('inf')

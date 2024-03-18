@@ -40,10 +40,10 @@ def construct_transition_matrix(policy_grid, action_space, stochasticity):
     return transition_matrix
 
 
-def compute_mfpt(policy_grid, action_space, stochasticity):
+def compute_mfpt(policy_grid, world_model):
 
     # Construct the transition matrix
-    transition_matrix = construct_transition_matrix(policy_grid, action_space, stochasticity)
+    transition_matrix = construct_transition_matrix(policy_grid, world_model.action_space, world_model.stochasticity)
 
     if is_singular(transition_matrix):
         print("WARNING: The transition matrix is singular, and the mean first passage time cannot be computed."
