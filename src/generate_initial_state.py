@@ -114,7 +114,7 @@ def generate_null_policy_fixed(initial_value_array):
     # Populate the policy array with (0, 0) actions
     for i in range(policy_shape[0]):
         for j in range(policy_shape[1]):
-            null_policy[i, j] = (0, 1)
+            null_policy[i, j] = (0, 0)
 
     return null_policy
 

@@ -15,9 +15,10 @@ class MDP:
         ############################
         # Operational Parameters
         ############################
+        self.policy_unstable = True
         self.iteration_count = 0
-        self.max_iterations = 100
-        self.convergence_threshold = 0.01
+        self.max_iterations = 1000
+        self.convergence_threshold = 1.0 / 10 ** (size * size)
         self.random_seed = random_seed
         ############################
         # MFPT Parameters
@@ -70,7 +71,7 @@ class MDP:
         policy_array = generate_null_policy_fixed(self.world_model.get_world_map())
         max_delta_value = float('inf')
         self.iteration_count = 0
-        while max_delta_value > self.convergence_threshold and self.iteration_count < self.max_iterations:
+        while max_delta_value > self.convergence_threshold and self.policy_unstable and self.iteration_count < self.max_iterations:
             # 1) Update the value array under the current policy
             self.value_array, max_delta_value = value_iteration_step(self.world_model,
                                                                      self.value_array,
@@ -78,26 +79,29 @@ class MDP:
                                                                      self.gamma,
                                                                      self.update_states)
             # 2) Update the policy array based on the updated value array
-            self.policy_array = policy_iteration_step(self.world_model,
-                                                                     self.value_array,
-                                                                     self.policy_array,
-                                                                     self.gamma,
-                                                                     self.update_states)
+            self.policy_array, self.policy_unstable = policy_iteration_step(self.world_model,
+                                                                            self.value_array,
+                                                                            self.policy_array,
+                                                                            self.gamma,
+                                                                            self.update_states)
             # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
             # minimize the mean first passage time.
             if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
-                self.mfpt_array = compute_mfpt(policy_array, self.world_model)
+                self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
                 self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
             # Update the iterations
             self.iteration_count += 1
-            # # Plot updated value and policy arrays
+            # Plots for debugging
             # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
-
+            # plot_mu_matrix(self.mfpt_array)
+            # plot_transition_matrix(t_matrix)
         print("Converged to a solution in", self.iteration_count, "steps")
 
         plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
         if self.use_mfpt:
+            self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
             plot_mu_matrix(self.mfpt_array)
+            plot_transition_matrix(t_matrix)
 
     # Write data to a pickle file
     def write_to_file(self, filename):

@@ -1,5 +1,7 @@
 import numpy as np
 
+from src.math_utils import is_out_of_bounds
+
 
 def policy_value_iteration(initialCondition, action_space, stochasticity, movement_cost_scale):
     N = len(initialCondition)  # Size of the grid
@@ -51,13 +53,15 @@ def policy_value_iteration(initialCondition, action_space, stochasticity, moveme
 
 
 def value_iteration_step(world_model, value_grid, policy_grid, gamma=0.9, update_states=None):
+    # Pull in a copy of the state space
+    state_space = world_model.get_world_map()
+
     # Ensure world_model.state_space, value_grid, and policy_grid are all the same size
     assert len(world_model.get_world_map()) == len(value_grid) == len(policy_grid)
 
     # Initialize grids for values and policies, and max_delta_value
     N = len(value_grid)  # Size of the grid
     new_value_grid = value_grid.copy()
-
 
     max_delta_value = 0  # To track the maximum change in value
 
@@ -74,20 +78,20 @@ def value_iteration_step(world_model, value_grid, policy_grid, gamma=0.9, update
             next_states = get_next_states(state, policy_grid[state], world_model)
             for new_state, prob in next_states.items():
                 # Ensure the new state is within bounds
-                if 0 <= new_state[0] < N and 0 <= new_state[1] < N:
-                    reward = get_reward(state, policy_grid[state], new_state, world_model)
-                    value += prob * ( reward + gamma * value_grid[new_state] ) # Bellman equation
-                else:
-                    #State is out of bounds
-                    print("WARNING: State is out of bounds during value iteration transition from "
+                if is_out_of_bounds(new_state, state_space): # Out of bounds
+                    new_state = state # Deterministically stay in bounds
+                reward = get_reward(state, policy_grid[state], new_state, world_model)
+                value += prob * (reward + gamma * value_grid[new_state])  # Bellman equation
+                if value > 1:
+                    print("WARNING: Value is greater than 1 during value iteration transition from "
                           , state, " to ", new_state, " under action ", policy_grid[state])
-                    exit(1)
             # Update the value grid and max_delta_value
             delta_value = abs(value - value_grid[state])
             if delta_value > max_delta_value:
                 max_delta_value = delta_value
             new_value_grid[state] = value
     return new_value_grid, max_delta_value
+
 
 def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_states=None):
     # Pull in a copy of the state space
@@ -98,11 +102,12 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
     # Initialize grids for values and policies, and max_delta_value
     N = len(value_grid)  # Size of the grid
     new_policy_grid = policy_grid.copy()
+    policy_unstable = True  # Track if the policy has changed
 
     # Iterate over each state in the grid if
     if update_states is None:
         update_states = [(i, j) for i in range(N) for j in range(N)]
-    for state in update_states: # Update the policy for each state
+    for state in update_states:  # Update the policy for each state
         if state_space[state] == world_model.goal_value:  # Goal state
             continue
         elif state_space[state] == world_model.wall_value:  # Wall
@@ -110,10 +115,10 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
         else:
             max_value = -float('inf')
             best_action = new_policy_grid[state]
-            for action in world_model.action_space.values(): # Check the value of each action
-                value= 0.0 # Initialize value for the action
+            for action in world_model.action_space.values():  # Check the value of each action
+                value = 0.0  # Initialize value for the action
                 next_states = get_next_states(state, action, world_model)
-                for new_state, prob in next_states.items(): # Check value contribution from each possible next state under the action
+                for new_state, prob in next_states.items():  # Check value contribution from each possible next state under the action
                     # Ensure the new state is within bounds
                     if 0 <= new_state[0] < N and 0 <= new_state[1] < N:
                         reward = get_reward(state, policy_grid[state], new_state, world_model)
@@ -126,8 +131,12 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
                     if value > max_value:
                         max_value = value
                         best_action = action
+        # Check for policy improvement
+        if best_action != policy_grid[state]:
+            policy_unstable = True
             new_policy_grid[state] = best_action
-    return new_policy_grid
+    return new_policy_grid, policy_unstable
+
 
 def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array, update_states=None):
     # Get a copy of the state space
@@ -142,7 +151,7 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
     # Iterate over each state in the grid if
     if update_states is None:
         update_states = [(i, j) for i in range(N) for j in range(N)]
-    for state in update_states: # Update the policy for each state
+    for state in update_states:  # Update the policy for each state
         if state_space[state] == world_model.goal_value:  # Goal state
             continue
         elif state_space[state] == world_model.wall_value:  # Wall
@@ -150,14 +159,15 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
         else:
             min_mfpt_value = float('inf')
             best_action = new_policy_grid[state]
-            for action in world_model.action_space.values(): # Check the value of each action
-                mfpt_value= 0.0 # Initialize value for the action
+            for action in world_model.action_space.values():  # Check the value of each action
+                mfpt_value = 0.0  # Initialize value for the action
                 next_states = get_next_states(state, action, world_model)
-                for new_state, prob in next_states.items(): # Check expected MFPT value for each possible next state
+                for new_state, prob in next_states.items():  # Check expected MFPT value for each possible next state
                     # under the action
                     # Ensure the new state is within bounds
                     if 0 <= new_state[0] < N and 0 <= new_state[1] < N:
-                        mfpt_value += prob * mfpt_array[new_state] # Contribution to the expected MFPT value of the action
+                        mfpt_value += prob * mfpt_array[
+                            new_state]  # Contribution to the expected MFPT value of the action
                     else:
                         # State is out of bounds
                         print("WARNING: State is out of bounds during value iteration transition from "
@@ -169,20 +179,23 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
             new_policy_grid[state] = best_action
     return new_policy_grid
 
+
 def get_next_states(state, policy_action, world_model):
     next_states = {}
     state_space = world_model.get_world_map()
     for action_name, action in world_model.action_space.items():
         new_state = (state[0] + action[0], state[1] + action[1])
-        if 0 <= new_state[0] < len(state_space) and 0 <= new_state[1] < len(state_space):
-            if state_space[new_state] == world_model.get_wall_value():  # Wall
-                new_state = state
-                next_states[new_state] = 1.0  # If you bounce off a wall, you stay in the same state with probability 1
-            elif action == policy_action:  # Not a wall
-                next_states[new_state] = 1 - world_model.stochasticity  # Take the policy action with probability
-                # 1 - stochasticity
-            else:  # A stochastic action has been taken
-                next_states[new_state] = world_model.stochasticity
+        if is_out_of_bounds(new_state, state_space):  # Out of bounds
+            new_state = state
+            next_states[new_state] = 1.0  # Deterministically stay in bounds
+        elif state_space[new_state] == world_model.get_wall_value():  # Wall
+            new_state = state
+            next_states[new_state] = 1.0  # If you bounce off a wall, you stay in the same state with probability 1
+        elif action == policy_action:  # Not a wall
+            next_states[new_state] = 1 - world_model.stochasticity
+            # 1 - stochasticity
+        else:  # A stochastic action has been taken
+            next_states[new_state] = world_model.stochasticity / len(world_model.get_action_space())
     return next_states
 
 
@@ -192,10 +205,6 @@ def get_reward(state, action, next_state, world_model):
     # Check if state and next_state are the same and action is non-stationary
     if state == next_state and action != (0, 0):
         return world_model.wall_reward
-
-    # Check if next_state is a goal state and action is non-stationary
-    if state_space[next_state] == 1 and action != (0, 0):
-        return world_model.goal_reward
 
     # Check if action is stationary
     if action == (0, 0):

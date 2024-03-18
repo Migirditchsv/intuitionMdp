@@ -45,7 +45,7 @@ def plot_value_and_policy(value_grid, policy_grid, iteration):
     plt.show()
 
 def plot_transition_matrix(transition_matrix):
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(8, 8))
     sns.heatmap(transition_matrix, cmap='vlag', annot=False, fmt=".2f")
     plt.title('Transition Matrix Heatmap')
     plt.xlabel('State j')
@@ -56,7 +56,7 @@ def plot_transition_matrix(transition_matrix):
 # Plots the mean first passage time matrix as a heatmap. NOTE: If getting weird results, try using a less stochasticity.
 # MFPT can fail to converge for moderate stochasticity values if the penalty for hitting a wall is too high.
 def plot_mu_matrix(mu_matrix):
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(8, 8))
 
     # Create a colormap for the heatmap
     cmap = plt.get_cmap('rocket')

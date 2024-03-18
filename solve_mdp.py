@@ -53,7 +53,7 @@ max_delta_value = float('inf')
 iteration_count = 0
 while max_delta_value > convergence_threshold and iteration_count < max_iterations:
     # Compute the mean first passage time for the current policy
-    mu = compute_mfpt(policy_array, action_space, stochasticity)
+    mu, t_matrix = compute_mfpt(policy_array, action_space, stochasticity)
 
     # Run the policy and value iteration algorithm
     value_array, policy_array, max_delta_value = policy_value_iteration(value_array, action_space, stochasticity, movement_cost_scale)
