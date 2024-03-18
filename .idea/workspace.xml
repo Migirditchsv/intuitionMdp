@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Fixed heinous OoB error">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Bad state">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/policy_value_iteration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/policy_value_iteration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/worldModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/visualization.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -291,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710736035202</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Bad state">
+      <option name="closed" value="true" />
+      <created>1710738544761</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1710738544761</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -311,7 +320,8 @@
     <MESSAGE value="Fixed policy update bug, causing policy to not update" />
     <MESSAGE value="Fixed world_model integration with mfpt" />
     <MESSAGE value="Fixed heinous OoB error" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed heinous OoB error" />
+    <MESSAGE value="Bad state" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bad state" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -323,28 +333,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/visualization.py</url>
-          <line>59</line>
+          <line>61</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/policy_value_iteration.py</url>
-          <line>155</line>
-          <option name="timeStamp" value="40" />
+          <line>130</line>
+          <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/policy_value_iteration.py</url>
-          <line>153</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/policy_value_iteration.py</url>
-          <line>112</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/policy_value_iteration.py</url>
-          <line>110</line>
-          <option name="timeStamp" value="43" />
+          <line>84</line>
+          <option name="timeStamp" value="45" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

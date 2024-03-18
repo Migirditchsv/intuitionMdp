@@ -82,7 +82,7 @@ def value_iteration_step(world_model, value_grid, policy_grid, gamma=0.9, update
             reward = get_reward(state, policy_grid[state], new_state, world_model)
             value += prob * (reward + gamma * value_grid[new_state])  # Bellman equation
             if value > 1:
-                print("WARNING: Value is greater than 1 during value iteration transition from "
+                print("WARNING: Value ", value, " is greater than 1 during value iteration transition from "
                       , state, " to ", new_state, " under action ", policy_grid[state])
         # Update the value grid and max_delta_value
         delta_value = abs(value - value_grid[state])
@@ -196,13 +196,14 @@ def get_next_states(state, policy_action, world_model):
 def get_reward(state, action, next_state, world_model):
     # Copy in the state space
     state_space = world_model.get_world_map()
-    # Check if state and next_state are the same and action is non-stationary
+    # Check for wall hit
     if state_space[next_state] == world_model.get_wall_value():
         return world_model.wall_reward
-
+    # Check for goal hit
+    elif state_space[next_state] == world_model.get_goal_value():
+        return world_model.goal_reward
     # Check if action is stationary
-    if action == (0, 0):
+    elif action == (0, 0):
         return world_model.stationary_reward
-
     # If none of the above conditions are met, return movement_cost
     return world_model.movement_reward

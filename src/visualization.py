@@ -3,22 +3,24 @@ import seaborn as sns
 from matplotlib import pyplot as plt, colors
 from matplotlib.patches import FancyArrowPatch
 
-
-def plot_value_and_policy(value_grid, policy_grid, iteration):
+# Plot the value and policy grids as a heatmap with arrows
+def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
+    # Pull in the initial state of the world
+    state_map = world_model.get_world_map()
     size = value_grid.shape[0]
     fig, ax = plt.subplots(figsize=(8, 8))
     # Use seaborn's 'rocket' color scheme for the heatmap, excluding wall cells
     mask = np.zeros_like(value_grid, dtype=bool)
     mask[value_grid == -1] = True  # Mask wall cells to keep them black
 
-    sns.heatmap(value_grid, mask=mask, cmap='rocket', cbar=True, ax=ax,
+    heatmap = sns.heatmap(value_grid, mask=mask, cmap='rocket', cbar=True, ax=ax,
                 cbar_kws={'label': 'Value'}, square=True, linewidths=.5, annot=False)
 
-    # Manually color wall cells black
+    # Manually give wall cells a semi-transparent solid rectangle and a black outline
     for i in range(size):
         for j in range(size):
-            if value_grid[i, j] == -1:
-                ax.add_patch(plt.Rectangle((j, i), 1, 1, color='grey'))
+            if state_map[i, j] == world_model.get_wall_value():
+                ax.add_patch(plt.Rectangle((j, i), 1, 1, fill=True, facecolor='black', alpha=0.5, edgecolor='black', lw=2))
             elif value_grid[i, j] <0 and value_grid[i, j] != -1:
                 value_grid[i, j] = 0 # Set negative values to 0 for better visualization
 
@@ -26,8 +28,9 @@ def plot_value_and_policy(value_grid, policy_grid, iteration):
     arrow_scale = min(size / 50.0, 0.1)  # Scale down arrow size
     for i in range(size):
         for j in range(size):
-            if value_grid[i, j] == 1:  # Mark goal with G
+            if state_map[i, j] == world_model.get_goal_value():  # Mark goal with G and a green border
                 ax.text(j + 0.5, i + 0.5, 'G', ha='center', va='center', color='green', fontsize=12, fontweight='bold')
+                ax.add_patch(plt.Rectangle((j, i), 1, 1, fill=None, edgecolor='green', lw=2))
             elif value_grid[i, j] != -1:  # Exclude walls
                 dx, dy = policy_grid[i, j]
                 if dx != 0 or dy != 0:

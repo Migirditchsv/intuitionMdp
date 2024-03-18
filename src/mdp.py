@@ -66,7 +66,7 @@ class MDP:
 
     def solve(self):
         # Plot initial world map
-        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
+        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
         # Generate the initial policy array as a null policy, stationary.
         policy_array = generate_null_policy_fixed(self.world_model.get_world_map())
         max_delta_value = float('inf')
@@ -92,12 +92,14 @@ class MDP:
             # Update the iterations
             self.iteration_count += 1
             # Plots for debugging
-            # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
-            # plot_mu_matrix(self.mfpt_array)
-            # plot_transition_matrix(t_matrix)
+            # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+            # if self.use_mfpt:
+            #     self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
+            #     plot_mu_matrix(self.mfpt_array)
+            #     plot_transition_matrix(t_matrix)
         print("Converged to a solution in", self.iteration_count, "steps")
 
-        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count)
+        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
         if self.use_mfpt:
             self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
             plot_mu_matrix(self.mfpt_array)
