@@ -4,7 +4,7 @@ from src.generate_initial_state import generate_world_map, generate_simple_initi
 
 
 class WorldModel:
-    def __init__(self, size, stochasticity, goal_number, wall_clustering, density):
+    def __init__(self, size, stochasticity, goal_number, wall_clustering, density, random_seed):
         self.wall_clustering = wall_clustering
         self.density = density
         self.wall_reward = -1
@@ -15,7 +15,7 @@ class WorldModel:
         self.wall_value = -1.0
         self.goal_value = 1.0
         self.empty_value = 0.0
-        self.random_seed = 12345
+        self.random_seed = random_seed
 
         self.size = size
         self.stochasticity = stochasticity

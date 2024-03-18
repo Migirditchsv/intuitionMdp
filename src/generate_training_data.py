@@ -1,15 +1,15 @@
 import sys
 
-import io
+import file_writer as fw
 import mdp
 import random
 
-def generate_mdps_and_solutions(sample_number, size, stochasticity, goal_number=1, use_mfpt=False):
+def generate_mdps_and_solutions(max_experiment_number, size, stochasticity, goal_number=1, use_mfpt=False):
     random_seed = 42  # Random seed for generating DIFFERENT random seeds so each MDP has a
     # derterministically unique world
     # Generate a unique file name for this experiment
-    filename = io.generate_experiment_name(size, stochasticity, use_mfpt)
-    for i in range(sample_number):
+    data_filename = fw.generate_experiment_name(size, stochasticity, use_mfpt)
+    for experiment_index in range(max_experiment_number):
         # Create a unique world seed for each MDP
         world_seed = random.randint(0, sys.maxsize)
         mdp_instance = mdp.MDP(size, stochasticity, goal_number, use_mfpt, world_seed)
@@ -20,7 +20,7 @@ def generate_mdps_and_solutions(sample_number, size, stochasticity, goal_number=
         optimal_value = None
 
         # Solve the MDP
-        convergence_data, optimal_value = mdp.solve()
+        convergence_data, optimal_value = mdp_instance.solve()
 
         for iteration in convergence_data.keys():
             # Parse the solution out of the solution dictionary
@@ -31,8 +31,17 @@ def generate_mdps_and_solutions(sample_number, size, stochasticity, goal_number=
         # Save the current state and solution to a binary file if the data looks healthy
         if not any( element is None for element in [size, value_array, max_delta_value, iteration,
                                                     stochasticity, optimal_value]):
-            io.to_binary(filename, sample_number, world_seed, size, value_array, max_delta_value, iteration,
+            fw.to_binary(data_filename, experiment_index, world_seed, size, value_array, max_delta_value, iteration,
                          stochasticity, optimal_value)
 
+    print(f"Generated {max_experiment_number} MDPs and solutions and saved to {data_filename}")
+
+    return data_filename
+
 # Call the function to generate and solve MDPs
-generate_mdps_and_solutions(3, 5, 0.1)
+max_experiment_number = 3
+size = 5
+stochasticity = 0.1
+filename = generate_mdps_and_solutions(max_experiment_number, size, stochasticity)
+# Call the function to create the gifs
+fw.create_heatmap_gifs(filename)

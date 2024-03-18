@@ -55,7 +55,7 @@ class MDP:
         ############################
         # Init World Model
         ############################
-        self.world_model = WorldModel(self.size, self.stochasticity, self.goal_number, self.wall_clustering, self.density)
+        self.world_model = WorldModel(self.size, self.stochasticity, self.goal_number, self.wall_clustering, self.density, random_seed)
 
         ############################
         # Tracking & solution variables
@@ -110,11 +110,11 @@ class MDP:
             #     plot_transition_matrix(t_matrix)
 
         # Plot solution
-        plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
-        if self.use_mfpt:
-            self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
-            plot_mu_matrix(self.mfpt_array)
-            plot_transition_matrix(t_matrix)
+        # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+        # if self.use_mfpt:
+        #     self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
+        #     plot_mu_matrix(self.mfpt_array)
+        #     plot_transition_matrix(t_matrix)
 
         # Print the number of iterations & convergence status
         if self.convergence_failure:
