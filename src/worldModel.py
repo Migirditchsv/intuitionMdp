@@ -10,9 +10,9 @@ class WorldModel:
         self.wall_reward = -1
         self.goal_reward = 1
         self.stationary_reward = 0
-        self.movement_reward = -0.01
+        self.movement_reward = -0.001
 
-        self.wall_value = -float('inf')
+        self.wall_value = -1.0
         self.goal_value = 1.0
         self.empty_value = 0.0
         self.random_seed = 12345

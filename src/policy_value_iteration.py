@@ -170,10 +170,10 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
 def get_next_states(state, policy_action, world_model):
     next_states = {}
     state_space = world_model.get_world_map()
-    for action, movement in world_model.action_space.items():
-        new_state = (state[0] + movement[0], state[1] + movement[1])
+    for action_name, action in world_model.action_space.items():
+        new_state = (state[0] + action[0], state[1] + action[1])
         if 0 <= new_state[0] < len(state_space) and 0 <= new_state[1] < len(state_space):
-            if state_space[new_state] == -1:  # Wall
+            if state_space[new_state] == world_model.get_wall_value():  # Wall
                 new_state = state
                 next_states[new_state] = 1.0  # If you bounce off a wall, you stay in the same state with probability 1
             elif action == policy_action:  # Not a wall
