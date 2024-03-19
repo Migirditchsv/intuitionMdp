@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="training data generation complete">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Fixed bug where figures weren't closing.">
+      <change afterPath="$PROJECT_DIR$/examples/comparison.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generate_training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_training_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generate_initial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_initial_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generate_training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/generate_training_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mfpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mfpt.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,31 +37,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python tests.Python tests in unit_tests.py.executor": "Run",
-    "Python.example.executor": "Run",
-    "Python.generate_training_data.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.mfpt.executor": "Debug",
-    "Python.solve_mdp.executor": "Run",
-    "Python.unit_tests.executor": "Run",
-    "Python.visualization.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Sam/PycharmProjects/intuitionMdp/src/generate_training_data.py",
-    "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python tests.Python tests in unit_tests.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.example.executor&quot;: &quot;Run&quot;,
+    &quot;Python.generate_training_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mfpt.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.solve_mdp.executor&quot;: &quot;Run&quot;,
+    &quot;Python.unit_tests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.visualization.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Sam/PycharmProjects/intuitionMdp/src/generate_training_data.py&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Sam\PycharmProjects\intuitionMdp\examples" />
       <recent name="C:\Users\Sam\PycharmProjects\intuitionMdp\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.generate_training_data">
+  <component name="RunManager" selected="Python.example">
     <configuration name="example" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="intuitionMdp" />
       <option name="ENV_FILES" value="" />
@@ -72,7 +77,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/example.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Sam\PycharmProjects\intuitionMdp\examples\example.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -95,7 +100,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/generate_training_data.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Sam\PycharmProjects\intuitionMdp\examples\generate_training_data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -372,7 +377,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710804972533</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Fixed bug where figures weren't closing.">
+      <option name="closed" value="true" />
+      <created>1710820034483</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1710820034483</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -410,7 +423,8 @@
     <MESSAGE value="Pickle dataset generation written, untested" />
     <MESSAGE value="pickle parser &amp; animator written" />
     <MESSAGE value="training data generation complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="training data generation complete" />
+    <MESSAGE value="Fixed bug where figures weren't closing." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug where figures weren't closing." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -424,11 +438,6 @@
           <url>file://$PROJECT_DIR$/src/visualization.py</url>
           <line>65</line>
           <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/mfpt.py</url>
-          <line>45</line>
-          <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/file_writer.py</url>

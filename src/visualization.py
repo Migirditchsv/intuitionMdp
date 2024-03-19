@@ -3,6 +3,8 @@ import seaborn as sns
 from matplotlib import pyplot as plt, colors
 from matplotlib.patches import FancyArrowPatch
 
+
+
 # Plot the value and policy grids as a heatmap with arrows
 def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
     # Close all figures to prevent memory leaks

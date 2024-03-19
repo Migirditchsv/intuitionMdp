@@ -28,6 +28,11 @@ def generate_mdps_and_solutions(max_experiment_number, size, stochasticity, goal
         # Solve time
         solve_time = time.time()
         print(f"Solver for experiment {experiment_index} took {solve_time - start_time} seconds")
+
+        # If convergence data is empty, the MDP did not converge and we should skip this experiment
+        if not convergence_data:
+            print(f"Skipping experiment {experiment_index} due to non-convergence")
+            continue
         for iteration in convergence_data.keys():
             # Parse the solution out of the solution dictionary
             value_array = convergence_data[iteration]['value_array']
@@ -50,10 +55,10 @@ def generate_mdps_and_solutions(max_experiment_number, size, stochasticity, goal
 
 
 # Call the function to generate and solve MDPs
-max_experiment_number = 1000
+max_experiment_number = 1
 size = 20
 stochasticity = 0.1
 frame_duration = 1.0
-filename = generate_mdps_and_solutions(max_experiment_number, size, stochasticity)
+filename = generate_mdps_and_solutions(max_experiment_number, size, stochasticity, use_mfpt=True)
 # Call the function to create the gifs
-#fw.create_heatmap_gifs(filename, frame_duration)
+fw.create_heatmap_gifs(filename, frame_duration)

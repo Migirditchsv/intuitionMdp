@@ -20,11 +20,7 @@ def construct_transition_matrix(policy_grid, world_model):
                 # Convert 2D indices to 1D index
                 old_state_1d = i * N + j
                 new_state_1d = new_state[0] * N + new_state[1]
-                # Update the transition matrix based on Debnath et al. (2019) eq (8)
-                if old_state_1d == new_state_1d:  # If T_ii
-                        transition_matrix[old_state_1d][new_state_1d] = prob - 1.0
-                else:
-                    transition_matrix[old_state_1d][new_state_1d] = prob
+                transition_matrix[old_state_1d][new_state_1d] = prob
 
     return transition_matrix
 
@@ -39,14 +35,15 @@ def compute_mfpt(policy_grid, world_model):
     # Convert T to a sparse matrix in CSR format
     # T_sparse = csr_matrix(transition_matrix)
 
-    # Simply invert Trans matrix
-    T_inv = np.linalg.inv(transition_matrix)
+    # expected hitting time mu = 1 + P mu , where 1 is a vector of ones
+    # -> (I-P)^(-1) * 1 = mu
 
-    # Create a negative vector of ones
-    id_vector = -np.ones(transition_matrix.shape[0])
+    # Compute (I-P)^(-1)
+    I = np.eye(transition_matrix.shape[0])
+    T_inv = np.linalg.inv(I - transition_matrix)
 
-    # Solve the system
-    mu = T_inv @ id_vector
+    # Compute mu
+    mu = np.dot(T_inv, np.ones(transition_matrix.shape[0]))
 
     N = int(np.sqrt(len(mu)))
     # Assert that N is the same size as the policy grid
