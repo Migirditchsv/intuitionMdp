@@ -157,7 +157,7 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
         min_mfpt_value = float('inf')
         best_action = new_policy_grid[state]
         for action in world_model.action_space.values():  # Check the value of each action
-            mfpt_value = None  # Initialize value for the action
+            mfpt_value = 0.0  # Initialize value for the action
             next_states = get_next_states(state, action, world_model)
             for new_state, prob in next_states.items():  # Check expected MFPT value for each possible next state
                 # under the action
@@ -184,7 +184,7 @@ def get_next_states(state, policy_action, world_model):
         if is_out_of_bounds(new_state, state_space):  # Out of bounds
             new_state = state
             next_states[new_state] = 1.0  # Deterministically stay in bounds
-        elif action == policy_action:  # Not a wall
+        elif action == policy_action:
             next_states[new_state] = 1 - world_model.stochasticity
             # 1 - stochasticity
         else:  # A stochastic action has been taken

@@ -1,6 +1,5 @@
 import random
 import numpy as np
-from noise import snoise2
 
 
 def generate_simple_initial_value(size, random_seed=None):
@@ -77,34 +76,34 @@ def generate_world_map(size, goal_number,
 
     return grid
 
-def generate_initial_values_simplex(size, goal_number, scale, octaves, persistence, lacunarity, threshold):
-    # Initialize the map with zeros
-    map_array = np.zeros((size, size))
-
-    # Place goals
-    goals_placed = 0
-    while goals_placed < goal_number:
-        x, y = random.randint(0, size - 1), random.randint(0, size - 1)
-        if map_array[x, y] == 0:  # Ensure not placing a goal on top of a wall or another goal
-            map_array[x, y] = 1.0
-            goals_placed += 1
-
-    # Iterate over each cell in the map
-    for i in range(size):
-        for j in range(size):
-            # Generate simplex noise for the cell
-            noise_value = snoise2(i / scale,
-                                  j / scale,
-                                  octaves=octaves,
-                                  persistence=persistence,
-                                  lacunarity=lacunarity)
-
-            # If the noise value is above the threshold, mark the cell as a wall
-            # Ensure not placing a wall on a goal
-            if noise_value > threshold and map_array[i, j] != 1.0:
-                map_array[i][j] = -1.0
-
-    return map_array
+# def generate_initial_values_simplex(size, goal_number, scale, octaves, persistence, lacunarity, threshold):
+#     # Initialize the map with zeros
+#     map_array = np.zeros((size, size))
+#
+#     # Place goals
+#     goals_placed = 0
+#     while goals_placed < goal_number:
+#         x, y = random.randint(0, size - 1), random.randint(0, size - 1)
+#         if map_array[x, y] == 0:  # Ensure not placing a goal on top of a wall or another goal
+#             map_array[x, y] = 1.0
+#             goals_placed += 1
+#
+#     # Iterate over each cell in the map
+#     for i in range(size):
+#         for j in range(size):
+#             # Generate simplex noise for the cell
+#             noise_value = snoise2(i / scale,
+#                                   j / scale,
+#                                   octaves=octaves,
+#                                   persistence=persistence,
+#                                   lacunarity=lacunarity)
+#
+#             # If the noise value is above the threshold, mark the cell as a wall
+#             # Ensure not placing a wall on a goal
+#             if noise_value > threshold and map_array[i, j] != 1.0:
+#                 map_array[i][j] = -1.0
+#
+#     return map_array
 
 def generate_null_policy(initial_value_array):
     # Determine the shape from the initial value array
