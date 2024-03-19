@@ -61,4 +61,4 @@ stochasticity = 0.1
 frame_duration = 1.0
 filename = generate_mdps_and_solutions(max_experiment_number, size, stochasticity, use_mfpt=True)
 # Call the function to create the gifs
-fw.create_heatmap_gifs(filename, frame_duration)
+fw.convergence_gif_from_pickle(filename, frame_duration)

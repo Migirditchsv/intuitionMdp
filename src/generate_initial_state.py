@@ -2,30 +2,6 @@ import random
 import numpy as np
 from noise import snoise2
 
-from src.mdp import MDP
-
-
-def generate_benchmark_mdps(size, stochasticity, goal_number, random_seed=None):
-
-    # Set the random seed if provided
-    if random_seed is None:
-        random_seed = random.randint(0, 1000000)
-
-    # Initialize normal mdp object
-    normal_mdp = MDP(size,
-              stochasticity,
-              goal_number,
-              use_mfpt=False,
-              random_seed=random_seed)
-
-    # Initialize mfpt mdp object
-    mftp_mdp = MDP(size,
-              stochasticity,
-              goal_number,
-              use_mfpt=False,
-              random_seed=random_seed)
-
-    return normal_mdp, mftp_mdp
 
 def generate_simple_initial_value(size, random_seed=None):
 

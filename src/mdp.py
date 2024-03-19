@@ -79,18 +79,19 @@ class MDP:
 
 
     # Solve the MDP
-    def solve(self, export_convergence_frames=False, use_mfpt=False, max_iterations=100):
+    def solve(self, max_iterations=100, export_convergence_frames=False, use_mfpt=False):
         """
         Solve the MDP using policy - value iteration
         :param export_convergence_frames: If true, export the convergence frames for later analysis. SLOW
         :param use_mfpt: If True, use the mean first passage time to update the policy every few iterations
         :param max_iterations: Maximum number of iterations to run before stopping for non-convergence
-        :return:
+        :return: The convergence data, value array, and policy array
         """
         # Plot initial world map
         # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
         # Generate the initial policy array as a null policy, stationary.
-
+        # Set max iterations
+        self.max_iterations = max_iterations
         # Timing
         start_time = time.time()
         policy_array = generate_null_policy(self.world_model.get_world_map())
@@ -134,9 +135,14 @@ class MDP:
                 mfpt_iteration_start_time = time.time()
                 self.mfpt_array, self.t_matrix = compute_mfpt(policy_array, self.world_model)
                 self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
+                # Plot for debugging
+                plot_mu_matrix(self.mfpt_array)
+                plot_transition_matrix(self.t_matrix)
+                plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
                 # Timing
                 mfpt_iteration_end_time = time.time()
                 self.mfpt_iteration_times.append(mfpt_iteration_end_time - mfpt_iteration_start_time)
+
             # Update the iterations
             self.iteration_count += 1
 
@@ -157,26 +163,6 @@ class MDP:
                     self.convergence_data[self.iteration_count]['mfpt_array'] = self.mfpt_array
                     self.convergence_data[self.iteration_count]['t_matrix'] = self.t_matrix
                     self.convergence_data[self.iteration_count]['mfpt_iteration_times'] = self.mfpt_iteration_times
-
-            # # Plots for debugging
-            # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
-            # plt.show()
-            # if self.use_mfpt:
-            #     self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
-            #     plot_mu_matrix(self.mfpt_array)
-            #     plt.show()
-            #     plot_transition_matrix(t_matrix)
-            #     plt.show()
-
-        # Plot solution for debugging
-        # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
-        # plt.show()
-        # if self.use_mfpt:
-        #     self.mfpt_array, t_matrix = compute_mfpt(policy_array, self.world_model)
-        #     plot_mu_matrix(self.mfpt_array)
-        #     plt.show()
-        #     plot_transition_matrix(t_matrix)
-        #     plt.show()
 
         # Print the number of iterations & convergence status
         if self.convergence_failure:

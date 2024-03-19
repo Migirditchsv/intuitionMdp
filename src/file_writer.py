@@ -1,14 +1,5 @@
 import pickle
 from datetime import datetime
-import os
-import glob
-import imageio
-import matplotlib.pyplot as plt
-import numpy as np
-
-from src.generate_initial_state import generate_null_policy
-from src.policy_value_iteration import policy_iteration_step
-from src.visualization import plot_value_and_policy
 
 
 def to_binary(filename, experiment_index, iteration, world_model, value_array, max_delta_value, optimal_value):
@@ -51,35 +42,3 @@ def generate_experiment_name(size, stochasticity, use_mfpt):
 
     return filename
 
-def create_heatmap_gifs(filename, frame_duration):
-    # Load the data from the binary file
-    experiment_index = None
-    data = from_binary(filename)
-    # For each unique experiment number, create a gif of the value functions converging as heat maps
-    for data_point in data:
-        # If new experiment has begun, reset the gif counter and filename
-        if data_point['experiment_index'] != experiment_index:
-            experiment_index = data_point['experiment_index']
-            gif_filename = f"{filename}_exp{experiment_index}.gif"
-            writer = imageio.get_writer(gif_filename, mode='I', duration=frame_duration, loop=0)
-
-        # Rehydrate the policy grid from the value array
-        policy_grid, _ = policy_iteration_step(data_point['world_model'],
-                                            data_point['value_array'],
-                                            generate_null_policy(data_point['value_array']),
-                                            gamma=0.9
-                                            )
-        fig, ax = plot_value_and_policy(data_point['value_array'],
-                                        policy_grid,
-                                        data_point['iteration'],
-                                        data_point['world_model']
-                                        )
-        # Save the figure as an image
-        plt.savefig("heatmap.png")
-        # Close the figure
-        plt.close(fig)
-        image = imageio.imread("heatmap.png")
-        writer.append_data(image)
-
-    writer.close()
-    os.remove("heatmap.png")

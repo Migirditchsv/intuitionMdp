@@ -24,6 +24,14 @@ def construct_transition_matrix(policy_grid, world_model):
 
     return transition_matrix
 
+def get_linear_index(index_tuple, array_2d):
+    i, j = index_tuple
+    num_cols = len(array_2d[0])
+    return i * num_cols + j
+
+def linear_index_to_2D(array_1d, array_2d):
+    return np.reshape(array_1d, array_2d.shape)
+
 
 def compute_mfpt(policy_grid, world_model):
     # Construct the transition matrix
@@ -40,10 +48,11 @@ def compute_mfpt(policy_grid, world_model):
 
     # Compute (I-P)^(-1)
     I = np.eye(transition_matrix.shape[0])
-    T_inv = np.linalg.inv(I - transition_matrix)
+    T_inv = np.linalg.inv(transition_matrix - I)
 
     # Compute mu
-    mu = np.dot(T_inv, np.ones(transition_matrix.shape[0]))
+    neg_ones_vec = -1 * np.ones(transition_matrix.shape[0])
+    mu = T_inv @ neg_ones_vec
 
     N = int(np.sqrt(len(mu)))
     # Assert that N is the same size as the policy grid

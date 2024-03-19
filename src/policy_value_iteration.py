@@ -157,7 +157,7 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
         min_mfpt_value = float('inf')
         best_action = new_policy_grid[state]
         for action in world_model.action_space.values():  # Check the value of each action
-            mfpt_value = 0.0  # Initialize value for the action
+            mfpt_value = None  # Initialize value for the action
             next_states = get_next_states(state, action, world_model)
             for new_state, prob in next_states.items():  # Check expected MFPT value for each possible next state
                 # under the action
