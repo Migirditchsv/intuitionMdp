@@ -7,8 +7,8 @@ import random
 
 
 def generate_mdps_and_solutions(max_experiment_number, size, stochasticity, goal_number=1, use_mfpt=False):
-    random_seed = 42  # Random seed for generating DIFFERENT random seeds so each MDP has a
-    # derterministically unique world
+    random_seed = random.randint(0, 99999999)  # Random seed for generating DIFFERENT random seeds so each MDP has a
+    # derterministically unique world. When making training data, ensure this is itself a random number to avoid repetative data
     # Generate a unique file name for this experiment
     data_filename = fw.generate_experiment_name(size, stochasticity, use_mfpt)
     for experiment_index in range(max_experiment_number):
@@ -40,10 +40,10 @@ def generate_mdps_and_solutions(max_experiment_number, size, stochasticity, goal
             else:
                 print(f"Skipping experiment {experiment_index} due to missing data")
                 exit(1)
-            # Print write time
-            write_time = time.time()
-            print(f"Write for experiment {experiment_index} took {write_time - solve_time} seconds")
-            print(f"Total time for experiment {experiment_index} is {write_time - start_time} seconds")
+    # Print write time
+    write_time = time.time()
+    print(f"Write for experiment {experiment_index} took {write_time - solve_time} seconds")
+    print(f"Total time for experiment {experiment_index} is {write_time - start_time} seconds")
     print(f"Generated {max_experiment_number} MDPs and solutions and saved to {data_filename}")
 
     return data_filename

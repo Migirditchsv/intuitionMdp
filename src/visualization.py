@@ -5,6 +5,8 @@ from matplotlib.patches import FancyArrowPatch
 
 # Plot the value and policy grids as a heatmap with arrows
 def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
+    # Close all figures to prevent memory leaks
+    plt.close('all')
     # Pull in the initial state of the world
     state_map = world_model.get_world_map()
     size = value_grid.shape[0]
@@ -44,6 +46,7 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
     ax.set_xticklabels(range(1, size + 1))
     ax.set_yticklabels(range(1, size + 1))
     ax.set_title('Iteration: ' + str(iteration))
+
 
     return fig, ax
 
