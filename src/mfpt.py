@@ -41,18 +41,22 @@ def compute_mfpt(policy_grid, world_model):
               "\n Adding a small constant to the diagonal elements to remove singularity.")
         transition_matrix = remove_singularity(transition_matrix)
     # Convert T to a sparse matrix in CSR format
-    # T_sparse = csr_matrix(transition_matrix)
+    #T_sparse = csr_matrix(transition_matrix)
 
     # expected hitting time mu = 1 + P mu , where 1 is a vector of ones
-    # -> (I-P)^(-1) * 1 = mu
+    # -> (P-I)^(-1) * 1 = mu
 
     # Compute (I-P)^(-1)
     I = np.eye(transition_matrix.shape[0])
-    T_inv = np.linalg.inv(transition_matrix - I)
+    #T_inv = np.linalg.inv(transition_matrix - I)
+    T_minus = csr_matrix(transition_matrix - I)
 
     # Compute mu
     neg_ones_vec = -1 * np.ones(transition_matrix.shape[0])
-    mu = T_inv @ neg_ones_vec
+    mu = spsolve(T_minus, neg_ones_vec)
+
+    # Flip sign
+    mu = -mu
 
     N = int(np.sqrt(len(mu)))
     # Assert that N is the same size as the policy grid

@@ -37,7 +37,7 @@ class MDP:
         self.stochasticity = stochasticity
         self.goal_number = goal_number
         # Parameters for simple wall placement
-        self.density = 0.2  # Probability a cell will be a wall using simple random placement (not used with simplex
+        self.density = 0.3  # Probability a cell will be a wall using simple random placement (not used with simplex
         # noise)
         self.wall_clustering = 0.35  # Probability a new wall will be placed adjacent to an existing wall using
         # simple random
@@ -99,6 +99,10 @@ class MDP:
         # Timing
         init_time = time.time()
         while max_delta_value > self.convergence_threshold and self.policy_unstable:
+            print(f"Iteration: {self.iteration_count},"
+                  f" max_delta_value: {max_delta_value} / {self.convergence_threshold},"
+                  f" policy unstable: {self.policy_unstable},"
+                  f" use_mfpt: {use_mfpt}")
             # Timing
             iteration_start_time = time.time()
 
@@ -140,9 +144,9 @@ class MDP:
 
 
                 # Plot for debugging
-                plot_mu_matrix(self.mfpt_array)
-                plot_transition_matrix(self.t_matrix)
-                plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+                # plot_mu_matrix(self.mfpt_array)
+                # plot_transition_matrix(self.t_matrix)
+                # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
                 # Timing
                 mfpt_iteration_end_time = time.time()
                 self.mfpt_iteration_times.append(mfpt_iteration_end_time - mfpt_iteration_start_time)
@@ -171,9 +175,9 @@ class MDP:
         # Print the number of iterations & convergence status
         if self.convergence_failure:
             print("WARNING: Failed to converge to a solution in", self.iteration_count, "steps")
-            return None, None
         else:
             print("Converged to a solution in", self.iteration_count, "steps")
+
 
         return self.convergence_data, self.value_array, self.policy_array
 

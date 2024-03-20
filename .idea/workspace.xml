@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="Re-tuned some world model parameters in light of changes.">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="sweet mother of god mfpt is working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/comparison.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/comparison.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generate_initial_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/generate_initial_state.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/policy_value_iteration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/policy_value_iteration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mfpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mfpt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/visualization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/worldModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldModel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -469,7 +469,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710894130428</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="sweet mother of god mfpt is working">
+      <option name="closed" value="true" />
+      <created>1710899664181</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1710899664181</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -484,7 +492,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Basic MDP class structure in place" />
     <MESSAGE value="Basic MDP class structure cleaned up" />
     <MESSAGE value="reward and transition functions defined" />
     <MESSAGE value="world parameters organized into world model" />
@@ -509,7 +516,8 @@
     <MESSAGE value="simplex noise removed" />
     <MESSAGE value="horrible ungodly get_next_states() normalization error that was breaking mfpt has been fixed" />
     <MESSAGE value="Re-tuned some world model parameters in light of changes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Re-tuned some world model parameters in light of changes." />
+    <MESSAGE value="sweet mother of god mfpt is working" />
+    <option name="LAST_COMMIT_MESSAGE" value="sweet mother of god mfpt is working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -520,11 +528,6 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/visualization.py</url>
-          <line>155</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$USER_HOME$/anaconda3/envs/intuitionMdp/Lib/site-packages/matplotlib/animation.py</url>
           <line>244</line>
           <option name="timeStamp" value="66" />
@@ -533,16 +536,6 @@
           <url>file://$USER_HOME$/anaconda3/envs/intuitionMdp/Lib/site-packages/matplotlib/animation.py</url>
           <line>1088</line>
           <option name="timeStamp" value="67" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/mfpt.py</url>
-          <line>65</line>
-          <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/mfpt.py</url>
-          <line>17</line>
-          <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

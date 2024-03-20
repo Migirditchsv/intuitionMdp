@@ -13,6 +13,53 @@ from src.policy_value_iteration import policy_iteration_step
 import glob
 
 
+def create_mfpt_gif(filename, convergence_data, world_model):
+    # File structure check
+    folder_path = f"./data/frames"
+    # Make sure the ./data folder exists, if not create it
+    if not os.path.exists('./data'):
+        os.makedirs('./data')
+    # Make sure the ./data/frames folder exists, if not create it
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    # If frames is not empty, delete all files in the folder
+    files = glob.glob('./data/frames/*.png')
+    for file in files: # Kind of dangerous be careful lol! the .png helps a little
+        os.remove(file)
+    # Create the output path
+    output_path = f"./data/{filename}.gif"
+
+    # Iterate through the convergence data to create mfpt heatmaps
+    for iteration in convergence_data.keys():
+        # Progress update:
+        print(f"Creating heatmap for iteration {iteration}: {round(iteration / len(convergence_data) * 100)}% complete")
+        policy_grid = convergence_data[iteration]['mfpt_array']
+        fig, ax = plot_mu_matrix(policy_grid, iteration, world_model)
+        plt.savefig(f"./data/frames/{iteration}_heatmap.png")
+        plt.close(fig)
+
+    # Get all the PNG files from the folder
+    png_files = [f for f in os.listdir(folder_path) if f.endswith('.png')]
+
+    # Sort files numerically
+    # Define a custom sorting key
+    def numeric_sort_key(file_name):
+        # Extract the number from the filename
+        number = int(file_name.split('_')[0])
+        return number
+    png_files.sort(key=numeric_sort_key)
+
+    # Create a list to hold the images
+    images = []
+
+    # Load each file into the images list
+    for file_name in png_files:
+        file_path = os.path.join(folder_path, file_name)
+        images.append(imageio.imread(file_path))
+
+    # Save the images as a gif
+    imageio.mimsave(output_path, images, fps=10, loop=0)
+
 def create_convergence_gif(filename, convergence_data, world_model):
     # File structure check
     folder_path = f"./data/frames"
@@ -31,6 +78,8 @@ def create_convergence_gif(filename, convergence_data, world_model):
 
     # Iterate through the convergence data to create policy and value heatmaps
     for iteration in convergence_data.keys():
+        # Progress update:
+        print(f"Creating heatmap for iteration {iteration}: {round(iteration / len(convergence_data) * 100)}% complete")
         policy_grid = convergence_data[iteration]['policy_array']
         value_array = convergence_data[iteration]['value_array']
         fig, ax = plot_value_and_policy(value_array, policy_grid, iteration, world_model)
@@ -99,11 +148,12 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
     plt.close('all')
     # Pull in the initial state of the world
     state_map = world_model.get_world_map()
+    wall_value = world_model.get_wall_value()
     size = value_grid.shape[0]
     fig, ax = plt.subplots(figsize=(8, 8))
     # Use seaborn's 'rocket' color scheme for the heatmap, excluding wall cells
     mask = np.zeros_like(value_grid, dtype=bool)
-    mask[value_grid == -1] = True  # Mask wall cells to keep them black
+    mask[value_grid == world_model.get_wall_value()] = True  # Mask wall cells to keep them black
 
     heatmap = sns.heatmap(value_grid, mask=mask, cmap='viridis', cbar=True, ax=ax,
                 cbar_kws={'label': 'Value'}, square=True, linewidths=.5, annot=False)
@@ -113,7 +163,7 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
         for j in range(size):
             if state_map[i, j] == world_model.get_wall_value():
                 ax.add_patch(plt.Rectangle((j, i), 1, 1, fill=True, facecolor='black', alpha=0.5, edgecolor='black', lw=2))
-            elif value_grid[i, j] <0 and value_grid[i, j] != -1:
+            elif value_grid[i, j] <0 and value_grid[i, j] != wall_value:
                 value_grid[i, j] = 0 # Set negative values to 0 for better visualization
 
     # Overlay goals and policy arrows, adjusting arrow size
@@ -123,7 +173,7 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
             if state_map[i, j] == world_model.get_goal_value():  # Mark goal with G and a green border
                 ax.text(j + 0.5, i + 0.5, 'G', ha='center', va='center', color='green', fontsize=12, fontweight='bold')
                 ax.add_patch(plt.Rectangle((j, i), 1, 1, fill=None, edgecolor='green', lw=2))
-            elif value_grid[i, j] != -1:  # Exclude walls
+            elif state_map[i, j] != wall_value:  # Exclude walls
                 dx, dy = policy_grid[i, j]
                 if dx != 0 or dy != 0:
                     # Adjust arrow size to not exceed cell size
@@ -136,7 +186,6 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
     ax.set_xticklabels(range(1, size + 1))
     ax.set_yticklabels(range(1, size + 1))
     ax.set_title('Iteration: ' + str(iteration))
-
 
     return fig, ax
 
@@ -151,27 +200,40 @@ def plot_transition_matrix(transition_matrix):
 
 # Plots the mean first passage time matrix as a heatmap. NOTE: If getting weird results, try using a less stochasticity.
 # MFPT can fail to converge for moderate stochasticity values if the penalty for hitting a wall is too high.
-def plot_mu_matrix(mu_matrix):
-    plt.figure(figsize=(8, 8))
+def plot_mu_matrix(mfpt_grid, iteration=None, world_model=None):
+    # Close all figures to prevent memory leaks
+    plt.close('all')
+    # Pull in the initial state of the world
+    state_map = world_model.get_world_map()
+    size = mfpt_grid.shape[0]
+    fig, ax = plt.subplots(figsize=(8, 8))
+    # Use seaborn's 'rocket' color scheme for the heatmap, excluding wall cells
+    mask = np.zeros_like(mfpt_grid, dtype=bool)
+    mask[state_map == world_model.get_wall_value()] = True  # Mask wall cells to keep them black
 
-    # Create a colormap for the heatmap
-    cmap = plt.get_cmap('viridis')
-    norm = colors.Normalize(vmin=mu_matrix.min(), vmax=mu_matrix.max())
+    heatmap = sns.heatmap(mfpt_grid, mask=mask, cmap='viridis', cbar=True, ax=ax,
+                          cbar_kws={'label': 'Value'}, square=True, linewidths=.5, annot=False)
 
-    # Create the heatmap using imshow
-    plt.imshow(mu_matrix, cmap=cmap, norm=norm)
+    # Manually give wall cells a semi-transparent solid rectangle and a black outline
+    for i in range(size):
+        for j in range(size):
+            if state_map[i, j] == world_model.get_wall_value():
+                ax.add_patch(
+                    plt.Rectangle((j, i), 1, 1, fill=True, facecolor='black', alpha=0.5, edgecolor='black', lw=2))
 
-    # Add a colorbar
-    plt.colorbar(label='Value')
+    # Overlay goals and policy arrows, adjusting arrow size
+    arrow_scale = min(size / 50.0, 0.1)  # Scale down arrow size
+    for i in range(size):
+        for j in range(size):
+            if state_map[i, j] == world_model.get_goal_value():  # Mark goal with G and a green border
+                ax.text(j + 0.5, i + 0.5, 'G', ha='center', va='center', color='green', fontsize=12,
+                        fontweight='bold')
+                ax.add_patch(plt.Rectangle((j, i), 1, 1, fill=None, edgecolor='green', lw=2))
 
-    # Add annotations
-    # for i in range(mu_matrix.shape[0]):
-    #     for j in range(mu_matrix.shape[1]):
-    #         text = plt.text(j, i, np.round(mu_matrix[i, j], 2),
-    #                        ha="center", va="center", color="w")
+    ax.set_xticks(range(size))
+    ax.set_yticks(range(size))
+    ax.set_xticklabels(range(1, size + 1))
+    ax.set_yticklabels(range(1, size + 1))
+    ax.set_title('MFPT\nIteration: ' + str(iteration))
 
-
-    plt.title('Mu Matrix Heatmap')
-    plt.xlabel('State j')
-    plt.ylabel('State i')
-    plt.show()
+    return fig, ax

@@ -3,7 +3,7 @@ import time
 
 from src import mdp
 from src.mdp import MDP
-from src.visualization import create_convergence_gif
+from src.visualization import create_convergence_gif, create_mfpt_gif
 
 
 def solve_mdp_with_and_without_mfpt(filename, size, goal_number, stochasticity, max_iterations, random_seed=None):
@@ -19,18 +19,24 @@ def solve_mdp_with_and_without_mfpt(filename, size, goal_number, stochasticity, 
     # # Construct benchmark MDPs
     normal_mdp, mfpt_mdp = generate_benchmark_mdps(size, stochasticity, goal_number, random_seed)
 
-    # # # Solve the MDP without using MFPT
+    # # # # Solve the MDP without using MFPT
     # normal_convergence_data, _, _ = normal_mdp.solve(max_iterations, export_convergence_frames=True)
     #
     # # Create a GIF of the normal convergence
     # create_convergence_gif(filename + '_normal', normal_convergence_data, normal_mdp.get_world_model())
+    # #create_runtime_gif(normal_convergence_data, filename + '_runtime_normal.gif')
 
     # Solve the MDP using MFPT
     mftp_convergence_data, _, _ = mfpt_mdp.solve(max_iterations, export_convergence_frames=True, use_mfpt=True)
+    print("COMPLETE")
 
 
     # Create a GIF of the convergence
+    print("Creating GIF, this may take a while...")
     create_convergence_gif(filename + '_mfpt', mftp_convergence_data, mfpt_mdp.get_world_model())
+    create_mfpt_gif("mu_convergence_"+filename + '_mfpt', mftp_convergence_data, mfpt_mdp.get_world_model())
+
+    #create_runtime_gif(mftp_convergence_data, filename + '_runtime_mfpt.gif')
 
 def generate_benchmark_mdps(size, stochasticity, goal_number, random_seed=None):
 
@@ -56,10 +62,10 @@ def generate_benchmark_mdps(size, stochasticity, goal_number, random_seed=None):
 
 
 # Usage:
-size = 40
+size = 20
 goal_number = 1
-stochasticity = 0.0
-max_iterations = 80
+stochasticity = 0.1
+max_iterations = 100
 # Time and date filename for experiment
 filename = time.strftime("%Y%m%d-%H%M%S")
 filename = 'comparison_' + filename
