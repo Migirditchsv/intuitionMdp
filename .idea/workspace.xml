@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="John Update">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="simplex noise removed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/comparison.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/comparison.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/solve_mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/solve_mdp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/policy_value_iteration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/policy_value_iteration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/worldModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldModel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +170,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/solve_mdp.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Sam\PycharmProjects\intuitionMdp\examples\solve_mdp.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -441,7 +445,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710886818157</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="simplex noise removed">
+      <option name="closed" value="true" />
+      <created>1710890417275</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1710890417275</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -456,7 +468,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Switching to laptop" />
     <MESSAGE value="Debnath transition matrix built" />
     <MESSAGE value="fixed mfpt calculation. Bug in mdp policy value iteration solver" />
     <MESSAGE value="Basic MDP class structure in place" />
@@ -481,7 +492,8 @@
     <MESSAGE value="Fixed bug where figures weren't closing." />
     <MESSAGE value="timing built into MDP.solve.&#10;Comparison script initialized" />
     <MESSAGE value="John Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="John Update" />
+    <MESSAGE value="simplex noise removed" />
+    <option name="LAST_COMMIT_MESSAGE" value="simplex noise removed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -508,7 +520,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/mdp.py</url>
-          <line>142</line>
+          <line>146</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -520,6 +532,16 @@
           <url>file://$PROJECT_DIR$/src/mfpt.py</url>
           <line>65</line>
           <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/policy_value_iteration.py</url>
+          <line>108</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/mdp.py</url>
+          <line>142</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

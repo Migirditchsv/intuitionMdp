@@ -9,8 +9,8 @@ class WorldModel:
         self.density = density
         self.wall_reward = -1
         self.goal_reward = 1
-        self.stationary_reward = -1.0 / (size * size)
-        self.movement_reward = --1.0 / (size * size)
+        self.stationary_reward = -0.1 / (size * size)
+        self.movement_reward = --0.2 / (size * size)
 
         self.wall_value = -1.0
         self.goal_value = 1.0

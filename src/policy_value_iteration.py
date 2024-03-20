@@ -111,8 +111,8 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
             pass#continue
         elif state_space[state] == world_model.wall_value:  # Wall
             pass#continue
-        max_value = -float('inf')
-        best_action = new_policy_grid[state]
+        max_value = -float('inf') # Refresh max value for the state
+        best_action = (0,0) # Default to stationary action
         for action in world_model.action_space.values():  # Check the value of each action
             value = 0.0  # Initialize value for the action
             next_states = get_next_states(state, action, world_model)
@@ -155,7 +155,7 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
         elif state_space[state] == world_model.wall_value:  # Wall
             pass#continue
         min_mfpt_value = float('inf')
-        best_action = new_policy_grid[state]
+        best_action = (0,0) # Default to stationary action
         for action in world_model.action_space.values():  # Check the value of each action
             mfpt_value = 0.0  # Initialize value for the action
             next_states = get_next_states(state, action, world_model)
@@ -172,7 +172,8 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
                 if mfpt_value < min_mfpt_value:
                     min_mfpt_value = mfpt_value
                     best_action = action
-            new_policy_grid[state] = best_action
+        new_policy_grid[state] = best_action
+        # Don't check for policy stability here, as the MFPT policy is not expected to be stable
     return new_policy_grid
 
 
@@ -188,7 +189,16 @@ def get_next_states(state, policy_action, world_model):
             next_states[new_state] = 1 - world_model.stochasticity
             # 1 - stochasticity
         else:  # A stochastic action has been taken
-            next_states[new_state] = world_model.stochasticity / len(world_model.get_action_space())
+            # Edge detection
+            vertical_edge = (state[0] == 0 or state[0] == len(state_space) - 1)
+            horizontal_edge = (state[1] == 0 or state[1] == len(state_space) - 1)
+            if vertical_edge and horizontal_edge: # Corner -> 3 moves + stationary
+                next_states[new_state] = world_model.stochasticity / 4
+            elif vertical_edge or horizontal_edge: # Edge -> 5 moves + stationary
+                next_states[new_state] = world_model.stochasticity / 6
+            else: # Middle -> 8 moves + stationary
+                next_states[new_state] = world_model.stochasticity / len(world_model.get_action_space())
+
     return next_states
 
 
