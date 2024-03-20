@@ -16,9 +16,6 @@ def construct_transition_matrix(policy_grid, world_model):
     for i in range(N):
         for j in range(N):
             next_states = get_next_states((i, j), policy_grid[(i, j)], world_model)
-            if max(next_states.values()) < 1.0:
-                print("WARNING: Stochastic action taken during deterministic MFPT policy iteration step")
-                exit(555)
             for new_state, prob in next_states.items():
                 # Convert 2D indices to 1D index
                 old_state_1d = i * N + j
@@ -51,15 +48,19 @@ def compute_mfpt(policy_grid, world_model):
 
     # Compute (I-P)^(-1)
     I = np.eye(transition_matrix.shape[0])
-    #T_inv = np.linalg.inv(transition_matrix - I)
-    T_minus = csr_matrix(transition_matrix - I)
-
+    T_minus = transition_matrix - I
+    #T_minus = csr_matrix(transition_matrix - I)
+    if is_singular(T_minus):
+        print("WARNING: The matrix (T-I) is singular, and the mean first passage time cannot be computed."
+              "\n Adding a small constant to the diagonal elements to remove singularity.")
+        T_minus = remove_singularity(T_minus)
+    T_minus_inv = np.linalg.inv(T_minus)
     # Compute mu
     neg_ones_vec = -1 * np.ones(transition_matrix.shape[0])
-    mu = spsolve(T_minus, neg_ones_vec)
-
+    #mu = spsolve(T_minus, neg_ones_vec)
+    mu = T_minus_inv @ neg_ones_vec
     # Flip sign
-    mu = -mu
+    #mu = -mu
 
     N = int(np.sqrt(len(mu)))
     # Assert that N is the same size as the policy grid

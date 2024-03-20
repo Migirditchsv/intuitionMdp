@@ -66,7 +66,7 @@ class MDP:
         self.iterations = 0
         self.value_array = self.world_model.get_world_map()
         self.policy_array = generate_null_policy(self.value_array)
-        self.mfpt_array = None
+        self.mfpt_array = np.zeros((self.size, self.size))
         self.t_matrix = None
         self.update_states = [index for index, value in np.ndenumerate(self.world_model.get_world_map())]
         self.convergence_data = {}
@@ -102,7 +102,8 @@ class MDP:
             print(f"Iteration: {self.iteration_count},"
                   f" max_delta_value: {max_delta_value} / {self.convergence_threshold},"
                   f" policy unstable: {self.policy_unstable},"
-                  f" use_mfpt: {use_mfpt}")
+                  f" use_mfpt: {use_mfpt},"
+                  f" mean mfpt: {np.mean(self.mfpt_array)}")
             # Timing
             iteration_start_time = time.time()
 
@@ -144,10 +145,10 @@ class MDP:
 
 
                 # Plot for debugging
-                fig, ax = plot_mu_matrix(self.mfpt_array, self.iteration_count, self.world_model)
-                plt.show()
-                plt.close(fig)
-                plot_transition_matrix(self.t_matrix)
+                # fig, ax = plot_mu_matrix(self.mfpt_array, self.iteration_count, self.world_model)
+                # plt.show()
+                # plt.close(fig)
+                # plot_transition_matrix(self.t_matrix)
                 # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
 
                 # Timing
