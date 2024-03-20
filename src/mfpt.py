@@ -3,8 +3,7 @@ from scipy.sparse.linalg import spsolve
 from scipy.sparse import csr_matrix, diags
 from src.math_utils import add_tuples
 from src.policy_value_iteration import get_next_states
-from src.visualization import plot_transition_matrix, plot_mu_matrix
-
+import seaborn as sns
 
 def construct_transition_matrix(policy_grid, world_model):
     # Copy in action space from world model
@@ -53,14 +52,15 @@ def compute_mfpt(policy_grid, world_model):
     if is_singular(T_minus):
         print("WARNING: The matrix (T-I) is singular, and the mean first passage time cannot be computed."
               "\n Adding a small constant to the diagonal elements to remove singularity.")
-        T_minus = remove_singularity(T_minus)
+        #T_minus = remove_singularity(T_minus)
     T_minus_inv = np.linalg.inv(T_minus)
     # Compute mu
     neg_ones_vec = -1 * np.ones(transition_matrix.shape[0])
+
+    sns.heatmap(T_minus_inv)
+
     #mu = spsolve(T_minus, neg_ones_vec)
     mu = T_minus_inv @ neg_ones_vec
-    # Flip sign
-    #mu = -mu
 
     N = int(np.sqrt(len(mu)))
     # Assert that N is the same size as the policy grid
@@ -73,9 +73,23 @@ def compute_mfpt(policy_grid, world_model):
 
     return mu_matrix, transition_matrix
 
+def get_ranked_states(mfpt_matrix):
+    N = mfpt_matrix.shape[0]
+
+    # Flatten the 2D array into a 1D array
+    mfpt_vector = mfpt_matrix.flatten()
+
+    # Get the 1D indices that would sort the array
+    sorted_indices_1d = np.argsort(mfpt_vector)
+
+    # Convert the 1D indices back to 2D indices
+    mfpt_ranked_states = [ (index_1d // N, index_1d % N ) for index_1d in sorted_indices_1d]
+
+    return mfpt_ranked_states
+
 
 def is_singular(matrix):
-    if np.linalg.matrix_rank(matrix) < min(matrix.shape):
+    if np.linalg.matrix_rank(matrix) > min(matrix.shape):
         return True
     else:
         return False

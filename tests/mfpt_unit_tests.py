@@ -1,6 +1,21 @@
 import unittest
 import numpy as np
-from src.mfpt import get_linear_index, linear_index_to_2D
+from src.mfpt import get_linear_index, linear_index_to_2D, get_ranked_states
+
+class TestGetRankedStates(unittest.TestCase):
+    def test_get_ranked_states(self):
+        # Define a known input and expected output
+        input_matrix = np.array([[3, 1, 2], [6, 4, 5], [9, 7, 8]])
+        expected_output = [(0, 1), (0, 2), (0, 0), (1, 1), (1, 2), (1, 0), (2, 1), (2, 2), (2, 0)]
+
+        # Call the function with the known input
+        output = get_ranked_states(input_matrix)
+
+        # Assert that the output is as expected
+        self.assertEqual(output, expected_output)
+
+if __name__ == '__main__':
+    unittest.main()
 
 class TestArrayFunctions(unittest.TestCase):
     def setUp(self):

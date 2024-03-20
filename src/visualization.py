@@ -32,7 +32,7 @@ def create_mfpt_gif(filename, convergence_data, world_model):
     # Iterate through the convergence data to create mfpt heatmaps
     for iteration in convergence_data.keys():
         # Progress update:
-        print(f"Creating heatmap for iteration {iteration}: {round(iteration / len(convergence_data) * 100)}% complete")
+        print(f"Creating mfpt heatmap for iteration {iteration}: {round(iteration / len(convergence_data) * 100)}% complete")
         policy_grid = convergence_data[iteration]['mfpt_array']
         fig, ax = plot_mu_matrix(policy_grid, iteration, world_model)
         plt.savefig(f"./data/frames/{iteration}_heatmap.png")
@@ -79,7 +79,7 @@ def create_convergence_gif(filename, convergence_data, world_model):
     # Iterate through the convergence data to create policy and value heatmaps
     for iteration in convergence_data.keys():
         # Progress update:
-        print(f"Creating heatmap for iteration {iteration}: {round(iteration / len(convergence_data) * 100)}% complete")
+        print(f"Creating policy-value heatmap for iteration {iteration}: {round(iteration / len(convergence_data) * 100)}% complete")
         policy_grid = convergence_data[iteration]['policy_array']
         value_array = convergence_data[iteration]['value_array']
         fig, ax = plot_value_and_policy(value_array, policy_grid, iteration, world_model)

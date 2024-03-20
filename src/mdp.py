@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from src.policy_value_iteration import  value_iteration_step, policy_iteration_step, \
     policy_iteration_mfpt_step
 from src.generate_initial_state import generate_null_policy
-from src.mfpt import compute_mfpt
+from src.mfpt import compute_mfpt, get_ranked_states
 from src.visualization import plot_transition_matrix, plot_value_and_policy, plot_mu_matrix
 import pickle
 import numpy as np
@@ -140,8 +140,9 @@ class MDP:
             # minimize the mean first passage time.
             if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
                 mfpt_iteration_start_time = time.time()
-                self.mfpt_array, self.t_matrix = compute_mfpt(policy_array, self.world_model)
-                self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
+                self.mfpt_array, self.t_matrix = compute_mfpt(self.policy_array, self.world_model)
+                self.update_states = get_ranked_states(self.mfpt_array)
+                # self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
 
 
                 # Plot for debugging

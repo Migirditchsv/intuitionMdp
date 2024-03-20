@@ -24,7 +24,7 @@ class WorldModel:
                                             self.empty_value, self.random_seed)
         self.action_space = {
             'up': (-1, 0), 'right': (0, 1), 'down': (1, 0), 'left': (0, -1),
-            'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1), 'stay': (0, 0)
+            'up-left': (-1, -1), 'up-right': (-1, 1), 'down-left': (1, -1), 'down-right': (1, 1)#, 'stay': (0, 0)
         }
 
     # Getter methods
