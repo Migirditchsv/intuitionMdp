@@ -180,27 +180,40 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
 def get_next_states(state, policy_action, world_model):
     next_states = {}
     state_space = world_model.get_world_map()
+    # If state is goal, return the same state with 100% probability
+    if state_space[state] == world_model.goal_value:
+        next_states[state] = 1.0
+        return next_states
     for action_name, action in world_model.action_space.items():
         new_state = (state[0] + action[0], state[1] + action[1])
-        if is_out_of_bounds(new_state, state_space):  # Out of bounds
+        if is_out_of_bounds(new_state, state_space):  # Any action that would take you OoB makes you stay in place
             new_state = state
-            next_states[new_state] = 1.0  # Deterministically stay in bounds
-        elif action == policy_action:
-            next_states[new_state] = 1 - world_model.stochasticity
-            # 1 - stochasticity
+        if action == policy_action:
+            next_states[new_state] = 1.0 - world_model.stochasticity
         else:  # A stochastic action has been taken
             # Edge detection
-            vertical_edge = (state[0] == 0 or state[0] == len(state_space) - 1)
-            horizontal_edge = (state[1] == 0 or state[1] == len(state_space) - 1)
-            if vertical_edge and horizontal_edge: # Corner -> 3 moves + stationary
-                next_states[new_state] = world_model.stochasticity / 4
-            elif vertical_edge or horizontal_edge: # Edge -> 5 moves + stationary
-                next_states[new_state] = world_model.stochasticity / 6
-            else: # Middle -> 8 moves + stationary
-                next_states[new_state] = world_model.stochasticity / len(world_model.get_action_space())
-
+            vertical_edge = (state[0] == 0 or state[0] == len(state_space) )
+            horizontal_edge = (state[1] == 0 or state[1] == len(state_space) )
+            if vertical_edge and horizontal_edge: # Corner -> 3 = 3 moves + stationary - 1 for policy
+                next_states[new_state] = world_model.stochasticity / 3
+            elif vertical_edge or horizontal_edge: # Edge -> 5 = 5 moves + stationary - 1 for policy
+                next_states[new_state] = world_model.stochasticity / 5
+            else: # Middle -> 8 moves + stationary - 1 for policy
+                next_states[new_state] = world_model.stochasticity / 8
+    # enforce that the probabilities sum to 1
+    next_states = normalize(next_states)
+    assert_probabilities_sum_to_one(next_states)
     return next_states
 
+def normalize(prob_dict):
+    total = sum(prob_dict.values())
+    if total == 0:
+        return {k: 1 / len(prob_dict) for k in prob_dict.keys()}
+    return {k: v / total for k, v in prob_dict.items()}
+
+def assert_probabilities_sum_to_one(prob_dict, epsilon=1e-6):
+    total = sum(prob_dict.values())
+    assert abs(total - 1) <= epsilon, f"Probabilities sum to {total}, which is not within {epsilon} of 1"
 
 def get_reward(state, action, next_state, world_model):
     # Copy in the state space

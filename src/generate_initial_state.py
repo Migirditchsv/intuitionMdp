@@ -58,7 +58,7 @@ def generate_world_map(size, goal_number,
             # Try to cluster walls based on wall_clustering probability
             if random.random() <= wall_clustering:
                 # Find an existing wall and place a new wall adjacent to it
-                existing_wall = random.choice(np.argwhere(grid == -1))
+                existing_wall = random.choice(np.argwhere(grid == wall_value))
                 directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
                 random.shuffle(directions)  # Shuffle directions to randomize wall placement
                 for dx, dy in directions:

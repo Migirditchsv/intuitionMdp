@@ -16,14 +16,14 @@ def solve_mdp_with_and_without_mfpt(filename, size, goal_number, stochasticity, 
     if random_seed is None:
         mdp.random_seed = random.randint(0, 1000000)
 
-    # Construct benchmark MDPs
+    # # Construct benchmark MDPs
     normal_mdp, mfpt_mdp = generate_benchmark_mdps(size, stochasticity, goal_number, random_seed)
 
-    # # Solve the MDP without using MFPT
-    normal_convergence_data, _, _ = normal_mdp.solve(max_iterations, export_convergence_frames=True)
-
-    # Create a GIF of the normal convergence
-    create_convergence_gif(filename + '_normal', normal_convergence_data, normal_mdp.get_world_model())
+    # # # Solve the MDP without using MFPT
+    # normal_convergence_data, _, _ = normal_mdp.solve(max_iterations, export_convergence_frames=True)
+    #
+    # # Create a GIF of the normal convergence
+    # create_convergence_gif(filename + '_normal', normal_convergence_data, normal_mdp.get_world_model())
 
     # Solve the MDP using MFPT
     mftp_convergence_data, _, _ = mfpt_mdp.solve(max_iterations, export_convergence_frames=True, use_mfpt=True)
@@ -56,10 +56,10 @@ def generate_benchmark_mdps(size, stochasticity, goal_number, random_seed=None):
 
 
 # Usage:
-size = 20
+size = 40
 goal_number = 1
-stochasticity = 0.5
-max_iterations = 100
+stochasticity = 0.0
+max_iterations = 80
 # Time and date filename for experiment
 filename = time.strftime("%Y%m%d-%H%M%S")
 filename = 'comparison_' + filename

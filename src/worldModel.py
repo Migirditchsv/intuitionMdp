@@ -8,11 +8,11 @@ class WorldModel:
         self.wall_clustering = wall_clustering
         self.density = density
         self.wall_reward = -1
-        self.goal_reward = 100
-        self.stationary_reward = 1.0
-        self.movement_reward = -0.2
+        self.goal_reward = 1
+        self.stationary_reward = 0.0
+        self.movement_reward = -0.01
 
-        self.wall_value = -1.0
+        self.wall_value = -0.50
         self.goal_value = 1.0
         self.empty_value = 0.0
         self.random_seed = random_seed
@@ -113,3 +113,4 @@ class WorldModel:
         self.goal_number = np.count_nonzero(self.world_map == self.goal_value) # Count goals
     def set_action_space(self, action_space):
         self.action_space = action_space
+        print("WARNING: Changing the action space is not recommended")
