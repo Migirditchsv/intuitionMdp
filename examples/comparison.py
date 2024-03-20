@@ -64,7 +64,7 @@ def generate_benchmark_mdps(size, stochasticity, goal_number, random_seed=None):
 # Usage:
 size = 20
 goal_number = 1
-stochasticity = 0.1
+stochasticity = 0.0
 max_iterations = 100
 # Time and date filename for experiment
 filename = time.strftime("%Y%m%d-%H%M%S")

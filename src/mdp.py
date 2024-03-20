@@ -144,9 +144,12 @@ class MDP:
 
 
                 # Plot for debugging
-                # plot_mu_matrix(self.mfpt_array)
-                # plot_transition_matrix(self.t_matrix)
+                fig, ax = plot_mu_matrix(self.mfpt_array, self.iteration_count, self.world_model)
+                plt.show()
+                plt.close(fig)
+                plot_transition_matrix(self.t_matrix)
                 # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+
                 # Timing
                 mfpt_iteration_end_time = time.time()
                 self.mfpt_iteration_times.append(mfpt_iteration_end_time - mfpt_iteration_start_time)

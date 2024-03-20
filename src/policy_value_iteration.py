@@ -70,15 +70,15 @@ def value_iteration_step(world_model, value_grid, policy_grid, gamma=0.9, update
         update_states = [(i, j) for i in range(N) for j in range(N)]
     for state in update_states:
         if new_value_grid[state] == world_model.goal_value:  # Goal state
-            pass#continue
+            pass  # continue
         elif new_value_grid[state] == world_model.wall_value:  # Wall
-            pass#continue
+            pass  # continue
         value = 0.0
         next_states = get_next_states(state, policy_grid[state], world_model)
         for new_state, prob in next_states.items():
             # Ensure the new state is within bounds
-            if is_out_of_bounds(new_state, state_space): # Out of bounds
-                new_state = state # Deterministically stay in bounds
+            if is_out_of_bounds(new_state, state_space):  # Out of bounds
+                new_state = state  # Deterministically stay in bounds
             reward = get_reward(state, policy_grid[state], new_state, world_model)
             value += prob * (reward + gamma * value_grid[new_state])  # Bellman equation
             # if value > 1:
@@ -108,11 +108,11 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
         update_states = [(i, j) for i in range(N) for j in range(N)]
     for state in update_states:  # Update the policy for each state
         if state_space[state] == world_model.goal_value:  # Goal state
-            pass#continue
+            pass  # continue
         elif state_space[state] == world_model.wall_value:  # Wall
-            pass#continue
-        max_value = -float('inf') # Refresh max value for the state
-        best_action = (0,0) # Default to stationary action
+            pass  # continue
+        max_value = -float('inf')  # Refresh max value for the state
+        best_action = (0, 0)  # Default to stationary action
         for action in world_model.action_space.values():  # Check the value of each action
             value = 0.0  # Initialize value for the action
             next_states = get_next_states(state, action, world_model)
@@ -129,7 +129,7 @@ def policy_iteration_step(world_model, value_grid, policy_grid, gamma, update_st
                 if value > max_value:
                     max_value = value
                     best_action = action
-    # Check for policy improvement
+        # Check for policy improvement
         if best_action != policy_grid[state]:
             policy_unstable = True
             new_policy_grid[state] = best_action
@@ -151,11 +151,11 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
         update_states = [(i, j) for i in range(N) for j in range(N)]
     for state in update_states:  # Update the policy for each state
         if state_space[state] == world_model.goal_value:  # Goal state
-            pass#continue
+            pass  # continue
         elif state_space[state] == world_model.wall_value:  # Wall
-            pass#continue
+            pass  # continue
         min_mfpt_value = float('inf')
-        best_action = (0,0) # Default to stationary action
+        best_action = (0, 0)  # Default to stationary action
         for action in world_model.action_space.values():  # Check the value of each action
             mfpt_value = 0.0  # Initialize value for the action
             next_states = get_next_states(state, action, world_model)
@@ -179,31 +179,64 @@ def policy_iteration_mfpt_step(world_model, value_grid, policy_grid, mfpt_array,
 
 def get_next_states(state, policy_action, world_model):
     next_states = {}
-    state_space = world_model.get_world_map()
+    action_space = world_model.get_action_space()
+    num_actions = len(action_space)
+    world_map = world_model.get_world_map()
+    N = len(world_map)
+
     # If state is goal, return the same state with 100% probability
-    if state_space[state] == world_model.goal_value:
+    if world_map[state] == world_model.goal_value:
         next_states[state] = 1.0
         return next_states
-    for action_name, action in world_model.action_space.items():
+
+    for action_name, action in action_space.items():
         new_state = (state[0] + action[0], state[1] + action[1])
-        if is_out_of_bounds(new_state, state_space):  # Any action that would take you OoB makes you stay in place
-            new_state = state
+        # Check if the new state is out of bounds
+        if new_state[0] < 0 or new_state[0] >= N or new_state[1] < 0 or new_state[1] >= N:
+            new_state = state  # Stay in place if the action would take you out of bounds
         if action == policy_action:
-            next_states[new_state] = 1.0 - world_model.stochasticity
-        else:  # A stochastic action has been taken
-            # Edge detection
-            vertical_edge = (state[0] == 0 or state[0] == len(state_space) )
-            horizontal_edge = (state[1] == 0 or state[1] == len(state_space) )
-            if vertical_edge and horizontal_edge: # Corner -> 3 = 3 moves + stationary - 1 for policy
-                next_states[new_state] = world_model.stochasticity / 3
-            elif vertical_edge or horizontal_edge: # Edge -> 5 = 5 moves + stationary - 1 for policy
-                next_states[new_state] = world_model.stochasticity / 5
-            else: # Middle -> 8 moves + stationary - 1 for policy
-                next_states[new_state] = world_model.stochasticity / 8
-    # enforce that the probabilities sum to 1
-    next_states = normalize(next_states)
-    assert_probabilities_sum_to_one(next_states)
+            # If the new_state key does not exist, create it with a value of 1 - stochasticity
+            next_states[new_state] = next_states.get(new_state, 0) + 1.0 - world_model.stochasticity
+        else:
+            next_states[new_state] = next_states.get(new_state, 0) + world_model.stochasticity / (num_actions - 1)
+
+    # Normalize probabilities
+    total = sum(next_states.values())
+    if total == 0:
+        return {k: 1 / len(next_states) for k in next_states.keys()}
+    for state, prob in next_states.items():
+        next_states[state] = prob / total
+
     return next_states
+
+
+# def get_next_states(state, policy_action, world_model):
+#     next_states = {}
+#     state_space = world_model.get_world_map()
+#     # If state is goal, return the same state with 100% probability
+#     if state_space[state] == world_model.goal_value:
+#         next_states[state] = 1.0
+#         return next_states
+#     for action_name, action in world_model.get_action_space().items():
+#         new_state = (state[0] + action[0], state[1] + action[1])
+#         if is_out_of_bounds(new_state, state_space):  # Any action that would take you OoB makes you stay in place
+#             new_state = state
+#         if action == policy_action:
+#             next_states[new_state] = 1.0 - world_model.stochasticity
+#         else:  # A stochastic action has been taken
+#             # Edge detection
+#             vertical_edge = (state[0] == 0 or state[0] == len(state_space) )
+#             horizontal_edge = (state[1] == 0 or state[1] == len(state_space) )
+#             if vertical_edge and horizontal_edge: # Corner -> 3 = 3 moves + stationary - 1 for policy
+#                 next_states[new_state] = world_model.stochasticity / 3
+#             elif vertical_edge or horizontal_edge: # Edge -> 5 = 5 moves + stationary - 1 for policy
+#                 next_states[new_state] = world_model.stochasticity / 5
+#             else: # Middle -> 8 moves + stationary - 1 for policy
+#                 next_states[new_state] = world_model.stochasticity / 8
+#     # enforce that the probabilities sum to 1
+#     next_states = normalize(next_states)
+#     assert_probabilities_sum_to_one(next_states)
+#     return next_states
 
 def normalize(prob_dict):
     total = sum(prob_dict.values())
@@ -211,9 +244,11 @@ def normalize(prob_dict):
         return {k: 1 / len(prob_dict) for k in prob_dict.keys()}
     return {k: v / total for k, v in prob_dict.items()}
 
+
 def assert_probabilities_sum_to_one(prob_dict, epsilon=1e-6):
     total = sum(prob_dict.values())
     assert abs(total - 1) <= epsilon, f"Probabilities sum to {total}, which is not within {epsilon} of 1"
+
 
 def get_reward(state, action, next_state, world_model):
     # Copy in the state space

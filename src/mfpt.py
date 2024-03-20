@@ -15,7 +15,10 @@ def construct_transition_matrix(policy_grid, world_model):
 
     for i in range(N):
         for j in range(N):
-            next_states = get_next_states((i, j), action_space, world_model)
+            next_states = get_next_states((i, j), policy_grid[(i, j)], world_model)
+            if max(next_states.values()) < 1.0:
+                print("WARNING: Stochastic action taken during deterministic MFPT policy iteration step")
+                exit(555)
             for new_state, prob in next_states.items():
                 # Convert 2D indices to 1D index
                 old_state_1d = i * N + j

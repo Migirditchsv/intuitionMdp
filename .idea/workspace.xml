@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="sweet mother of god mfpt is working">
+    <list default="true" id="9ba859dd-cdca-48a3-82fe-456edb3bcc3e" name="Changes" comment="mfpt animations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/comparison.py" beforeDir="false" afterPath="$PROJECT_DIR$/examples/comparison.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mdp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mdp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mfpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/mfpt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/worldModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/worldModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/policy_value_iteration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/policy_value_iteration.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -477,7 +476,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710899664181</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="mfpt animations">
+      <option name="closed" value="true" />
+      <created>1710907374748</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1710907374748</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -492,7 +499,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Basic MDP class structure cleaned up" />
     <MESSAGE value="reward and transition functions defined" />
     <MESSAGE value="world parameters organized into world model" />
     <MESSAGE value="value update defined" />
@@ -517,7 +523,8 @@
     <MESSAGE value="horrible ungodly get_next_states() normalization error that was breaking mfpt has been fixed" />
     <MESSAGE value="Re-tuned some world model parameters in light of changes." />
     <MESSAGE value="sweet mother of god mfpt is working" />
-    <option name="LAST_COMMIT_MESSAGE" value="sweet mother of god mfpt is working" />
+    <MESSAGE value="mfpt animations" />
+    <option name="LAST_COMMIT_MESSAGE" value="mfpt animations" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -536,6 +543,16 @@
           <url>file://$USER_HOME$/anaconda3/envs/intuitionMdp/Lib/site-packages/matplotlib/animation.py</url>
           <line>1088</line>
           <option name="timeStamp" value="67" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/mfpt.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/mfpt.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="111" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
