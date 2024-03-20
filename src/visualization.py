@@ -105,7 +105,7 @@ def plot_value_and_policy(value_grid, policy_grid, iteration, world_model):
     mask = np.zeros_like(value_grid, dtype=bool)
     mask[value_grid == -1] = True  # Mask wall cells to keep them black
 
-    heatmap = sns.heatmap(value_grid, mask=mask, cmap='rocket', cbar=True, ax=ax,
+    heatmap = sns.heatmap(value_grid, mask=mask, cmap='viridis', cbar=True, ax=ax,
                 cbar_kws={'label': 'Value'}, square=True, linewidths=.5, annot=False)
 
     # Manually give wall cells a semi-transparent solid rectangle and a black outline
@@ -155,7 +155,7 @@ def plot_mu_matrix(mu_matrix):
     plt.figure(figsize=(8, 8))
 
     # Create a colormap for the heatmap
-    cmap = plt.get_cmap('rocket')
+    cmap = plt.get_cmap('viridis')
     norm = colors.Normalize(vmin=mu_matrix.min(), vmax=mu_matrix.max())
 
     # Create the heatmap using imshow

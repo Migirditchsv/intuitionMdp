@@ -8,9 +8,9 @@ class WorldModel:
         self.wall_clustering = wall_clustering
         self.density = density
         self.wall_reward = -1
-        self.goal_reward = 1
-        self.stationary_reward = -0.1 / (size * size)
-        self.movement_reward = --0.2 / (size * size)
+        self.goal_reward = 100
+        self.stationary_reward = 1.0
+        self.movement_reward = -0.2
 
         self.wall_value = -1.0
         self.goal_value = 1.0

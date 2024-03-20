@@ -20,10 +20,10 @@ def solve_mdp_with_and_without_mfpt(filename, size, goal_number, stochasticity, 
     normal_mdp, mfpt_mdp = generate_benchmark_mdps(size, stochasticity, goal_number, random_seed)
 
     # # Solve the MDP without using MFPT
-    # normal_convergence_data, _, _ = normal_mdp.solve(max_iterations, export_convergence_frames=True)
-    #
-    # # Create a GIF of the normal convergence
-    # create_convergence_gif(filename + '_normal', normal_convergence_data, normal_mdp.get_world_model())
+    normal_convergence_data, _, _ = normal_mdp.solve(max_iterations, export_convergence_frames=True)
+
+    # Create a GIF of the normal convergence
+    create_convergence_gif(filename + '_normal', normal_convergence_data, normal_mdp.get_world_model())
 
     # Solve the MDP using MFPT
     mftp_convergence_data, _, _ = mfpt_mdp.solve(max_iterations, export_convergence_frames=True, use_mfpt=True)

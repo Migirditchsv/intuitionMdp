@@ -129,7 +129,7 @@ class MDP:
             self.policy_iteration_times.append(policy_iteration_end_time - policy_iteration_start_time)
 
             # Plot for debugging
-            plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+            # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
 
             # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
             # minimize the mean first passage time.
@@ -140,9 +140,9 @@ class MDP:
 
 
                 # Plot for debugging
-                plot_mu_matrix(self.mfpt_array)
-                plot_transition_matrix(self.t_matrix)
-                plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+                # plot_mu_matrix(self.mfpt_array)
+                # plot_transition_matrix(self.t_matrix)
+                # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
                 # Timing
                 mfpt_iteration_end_time = time.time()
                 self.mfpt_iteration_times.append(mfpt_iteration_end_time - mfpt_iteration_start_time)
