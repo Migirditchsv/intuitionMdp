@@ -98,7 +98,7 @@ class MDP:
         self.iteration_count = 0
         # Timing
         init_time = time.time()
-        while max_delta_value > self.convergence_threshold and self.policy_unstable:
+        while self.policy_unstable:
             print(f"Iteration: {self.iteration_count},"
                   f" max_delta_value: {max_delta_value} / {self.convergence_threshold},"
                   f" policy unstable: {self.policy_unstable},"
