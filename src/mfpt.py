@@ -57,8 +57,6 @@ def compute_mfpt(policy_grid, world_model):
     # Compute mu
     neg_ones_vec = -1 * np.ones(transition_matrix.shape[0])
 
-    sns.heatmap(T_minus_inv)
-
     #mu = spsolve(T_minus, neg_ones_vec)
     mu = T_minus_inv @ neg_ones_vec
 

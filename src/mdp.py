@@ -22,7 +22,7 @@ class MDP:
         self.policy_unstable = True
         self.iteration_count = 0
         self.max_iterations = 1000
-        self.convergence_threshold = 1e-3
+        self.convergence_threshold = 1e-2
         self.random_seed = random_seed
         ############################
         # MFPT Parameters
@@ -111,6 +111,19 @@ class MDP:
             if self.iteration_count >= self.max_iterations:
                 self.convergence_failure = True
                 break
+
+            # 0) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
+            # minimize the mean first passage time.
+            if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
+                mfpt_iteration_start_time = time.time()
+                self.mfpt_array, self.t_matrix = compute_mfpt(self.policy_array, self.world_model)
+                self.update_states = get_ranked_states(self.mfpt_array)
+                # self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
+                # Timing
+                mfpt_iteration_end_time = time.time()
+                self.mfpt_iteration_times.append(mfpt_iteration_end_time - mfpt_iteration_start_time)
+
+
             # 1) Update the value array under the current policy
             value_iteration_start_time = time.time()
             self.value_array, max_delta_value = value_iteration_step(self.world_model,
@@ -136,25 +149,16 @@ class MDP:
             # Plot for debugging
             plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
 
-            # 3) Compute the mean first passage time for the current policy, every few iterations. Update the policy to
-            # minimize the mean first passage time.
-            if self.use_mfpt and self.iteration_count % self.iterations_per_mfpt_update == 0:
-                mfpt_iteration_start_time = time.time()
-                self.mfpt_array, self.t_matrix = compute_mfpt(self.policy_array, self.world_model)
-                self.update_states = get_ranked_states(self.mfpt_array)
-                # self.policy_array = policy_iteration_mfpt_step(self.world_model, self.value_array, self.policy_array, self.mfpt_array)
 
 
-                # Plot for debugging
-                # fig, ax = plot_mu_matrix(self.mfpt_array, self.iteration_count, self.world_model)
-                # plt.show()
-                # plt.close(fig)
-                # plot_transition_matrix(self.t_matrix)
-                # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
+            # Plot for debugging
+            # fig, ax = plot_mu_matrix(self.mfpt_array, self.iteration_count, self.world_model)
+            # plt.show()
+            # plt.close(fig)
+            # plot_transition_matrix(self.t_matrix)
+            # plot_value_and_policy(self.value_array, self.policy_array, self.iteration_count, self.world_model)
 
-                # Timing
-                mfpt_iteration_end_time = time.time()
-                self.mfpt_iteration_times.append(mfpt_iteration_end_time - mfpt_iteration_start_time)
+
 
             # Update the iterations
             self.iteration_count += 1
@@ -176,12 +180,14 @@ class MDP:
                     self.convergence_data[self.iteration_count]['mfpt_array'] = self.mfpt_array
                     self.convergence_data[self.iteration_count]['t_matrix'] = self.t_matrix
                     self.convergence_data[self.iteration_count]['mfpt_iteration_times'] = self.mfpt_iteration_times
-
+        # Timing
+        end_time = time.time()
+        self.total_time = end_time - start_time
         # Print the number of iterations & convergence status
         if self.convergence_failure:
-            print("WARNING: Failed to converge to a solution in", self.iteration_count, "steps")
+            print("WARNING: Failed to converge to a solution in", self.iteration_count, "steps and ", self.total_time, "seconds")
         else:
-            print("Converged to a solution in", self.iteration_count, "steps")
+            print("Converged to a solution in", self.iteration_count, "steps and ", self.total_time, "seconds")
 
 
         return self.convergence_data, self.value_array, self.policy_array

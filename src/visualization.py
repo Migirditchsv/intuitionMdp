@@ -58,7 +58,7 @@ def create_mfpt_gif(filename, convergence_data, world_model):
         images.append(imageio.imread(file_path))
 
     # Save the images as a gif
-    imageio.mimsave(output_path, images, fps=10, loop=0)
+    imageio.mimsave(output_path, images, fps= 5) # Adding loop=0 # loop=0 argument makes the gif loop indefinitely
 
 def create_convergence_gif(filename, convergence_data, world_model):
     # File structure check
@@ -106,7 +106,7 @@ def create_convergence_gif(filename, convergence_data, world_model):
         images.append(imageio.imread(file_path))
 
     # Save the images as a gif
-    imageio.mimsave(output_path, images, fps=10, loop=0)
+    imageio.mimsave(output_path, images, fps= 5) # Adding loop=0 # loop=0 argument makes the gif loop indefinitely
 
 def convergence_gif_from_pickle(filename, frame_duration):
     # Load the data from the binary file
